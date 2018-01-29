@@ -1,5 +1,5 @@
 Attribute VB_Name = "C0_Callbacks"
-Dim x As New EventClassModule
+Dim x As New Event_ClassModule
 
 Sub Register_Event_Handler()
  Set x.App = word.Application
