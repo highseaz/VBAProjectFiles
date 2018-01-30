@@ -7,13 +7,13 @@ Public Sub RightClickNewMenuAmd()
 
     Dim comBarName
     comBarName = Array("Lists", "Text")
-    Debug.Print 1, comBarName(0), comBarName(1)
+'    Debug.Print 1, comBarName(0), comBarName(1)
 
     For i = 0 To UBound(comBarName)
         With Application.CommandBars(comBarName(i))
         
             .Reset
-            Half = Int(.Controls.Count / 2) '中间位置
+            Half = Int(.Controls.count / 2) '中间位置
 
 
             Set NewButton1 = .Controls.Add(Type:=msoControlButton, Before:=Half)

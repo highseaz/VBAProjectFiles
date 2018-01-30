@@ -17,7 +17,7 @@ Sub splitBySections()
     spath = sourceDoc.Path
     strBaseFilename = sourceDoc.Name
 
-    For i = 1 To sourceDoc.Sections.Count
+    For i = 1 To sourceDoc.Sections.count
         Set myRange = sourceDoc.Sections(i).Range
         istart = myRange.Start
         iEnd = myRange.End - 1
@@ -34,7 +34,7 @@ Sub splitBySections()
         tarDoc.SaveAs2 tarDocFullName
         tarDoc.Close
 
-        Application.PrintOut FileName:=Chr(34) & tarDocFullName & Chr(34), Background:=True
+        Application.PrintOut Filename:=Chr(34) & tarDocFullName & Chr(34), Background:=True
     Next
 
     Application.ScreenUpdating = True

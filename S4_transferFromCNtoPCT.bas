@@ -98,7 +98,7 @@ Else:
 
     ''-ExtractStringByPatternFrom----------------
     ''-------------------------------------------------------------------
-    docNew.SaveAs FileName:=strNewFileName
+    docNew.SaveAs Filename:=strNewFileName
     docOri.Close SaveChanges:=wdDoNotSaveChanges
 
     Set docNew = Nothing
@@ -246,3 +246,16 @@ Public Sub PCTContentFormating(ByVal rng As Range, Optional ByVal Formatingtype 
 End Sub
 
 
+Sub acceptFormatChanges()
+    With ActiveWindow.View
+        .ShowFormatChanges = True
+        '        .ShowRevisionsAndComments = False
+        .ShowInsertionsAndDeletions = False
+        
+         ActiveDocument.AcceptAllRevisionsShown
+         
+        .ShowRevisionsAndComments = True
+        .ShowFormatChanges = True
+        .ShowInsertionsAndDeletions = True
+    End With
+End Sub

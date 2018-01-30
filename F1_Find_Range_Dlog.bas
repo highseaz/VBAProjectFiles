@@ -9,7 +9,7 @@ Function RangeIncludingStr(findwhat As String, ByVal Doc As Document, Optional B
     Dim RE As Object
     Dim para As Paragraph
     Dim rang As Range
-    iCount = 0
+    icount = 0
 
     Set RE = CreateObject("VBScript.RegExp")
     If spaceSenstive Then
@@ -21,11 +21,12 @@ Function RangeIncludingStr(findwhat As String, ByVal Doc As Document, Optional B
     RE.Global = True
     For Each para In Doc.Paragraphs
         If RE.test(para.Range.text) Then
-            iCount = iCount + 1
+            icount = icount + 1
+            
             Set rang = para.Range
         End If
     Next para
-    If iCount <> 1 Then Debug.Print iCount & findwhat & "found."
+    If icount <> 1 Then Debug.Print icount & Chr(34) & findwhat & Chr(34) & " found."
     Set RangeIncludingStr = rang
     Set rang = Nothing
 
@@ -129,7 +130,7 @@ Function ExtractStringByPatternFrom(FindPattern As String, ByVal text As String)
         RE.IgnoreCase = True
     Set allMatches = RE.Execute(text)
     
-    If allMatches.Count <> 0 Then
+    If allMatches.count <> 0 Then
     ' Debug.Print allMatches
         result = allMatches.Item(0)
     Else

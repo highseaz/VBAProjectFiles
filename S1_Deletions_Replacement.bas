@@ -1,9 +1,7 @@
 Attribute VB_Name = "S1_Deletions_Replacement"
 Sub DelBlankPara(Optional Doc As Document)
-    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
 
-    'É¾³ý¿Õ°×¶ÎÂä
-
+If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
     Application.ScreenUpdating = False
     For Each i In Doc.Paragraphs
         If Len(Trim(i.Range)) = 1 Then
@@ -11,70 +9,73 @@ Sub DelBlankPara(Optional Doc As Document)
             n = n + 1
         End If
     Next
-    Debug.Print "¹²É¾³ý¿Õ°×¶ÎÂä" & n & "¸ö"
+    Debug.Print "Delete " & n & " blank Paragraphs"
     Application.ScreenUpdating = True
 End Sub
 
 
-Sub delContentinMidbracket()
-    ' É¾³ýÖÐÀ¨ºÅÖÐµÄÄÚÈÝ
-    Selection.Find.ClearFormatting
-    Selection.Find.Replacement.ClearFormatting
-    With Selection.Find
-        .text = "\[*\]"
-        .Replacement.text = ""
-        .format = False
-        .MatchCase = False
-        .MatchWholeWord = False
-        .MatchByte = False
-        .MatchAllWordForms = False
-        .MatchSoundsLike = False
-        .MatchWildcards = True
-        .Execute Replace:=wdReplaceOne
+Sub delContentinMidbracket(Optional rng As Range = Selection)
+    With rng
+        .Find.ClearFormatting
+        .Find.Replacement.ClearFormatting
+        With .Find
+            .text = "\[*\]"
+            .Replacement.text = ""
+            .format = False
+            .MatchCase = False
+            .MatchWholeWord = False
+            .MatchByte = False
+            .MatchAllWordForms = False
+            .MatchSoundsLike = False
+            .MatchWildcards = True
+            .Execute Replace:=wdReplaceOne
+        End With
     End With
-
 End Sub
 
 Sub delSpace(Optional Doc As Document)
 
-    trackflag = ActiveDocument.TrackRevisions
+If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
 
-    ActiveDocument.TrackRevisions = False
+    With Doc
+        trackflag = .TrackRevisions
 
-    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
-    With Doc.Content
-        With .Find
-            .text = "([!a-zA-Z0-9_,.;:\! ])^32{1,}([!a-zA-Z])"
-            .Replacement.text = "\1\2"
-            .MatchWildcards = True
-            .Execute Replace:=wdReplaceAll
+        .TrackRevisions = False
+
+        With .Content
+            With .Find
+                .text = "([!a-zA-Z0-9_,.;:\! ])^32{1,}([!a-zA-Z])"
+                .Replacement.text = "\1\2"
+                .MatchWildcards = True
+                .Execute Replace:=wdReplaceAll
+            End With
+            With .Find
+                .text = "^32{2,}"
+                .Replacement.text = "^32"
+                .MatchWildcards = True
+                .Execute Replace:=wdReplaceAll
+            End With
+            With .Find
+                .text = " ([,.;])"
+                .Replacement.text = "\1"
+                .MatchWildcards = True
+                .Execute Replace:=wdReplaceAll
+            End With
         End With
-        With .Find
-            .text = "^32{2,}"
-            .Replacement.text = "^32"
-            .MatchWildcards = True
-            .Execute Replace:=wdReplaceAll
-        End With
-        With .Find
-            .text = " ([,.;])"
-            .Replacement.text = "\1"
-            .MatchWildcards = True
-            .Execute Replace:=wdReplaceAll
-        End With
+        .TrackRevisions = trackflag
     End With
-    ActiveDocument.TrackRevisions = trackflag
 End Sub
 
 Sub DeleteUselessEnterinSelection()
-Dim str As String
+    Dim str As String
 
- str = "([£»£º£¬])^13([!Í¼])"
- Call DeletePatternsInSelection(str, 1, 1)
- 
+    str = "([£»£º£¬»ò])^13([!Í¼])"
+    Call DeletePatternsInSelection(str, 1, 1)
+
 End Sub
 
-Sub DeletePatternsInSelection(strPattern As String, posToStart As Integer, LenthofDeletion As Integer)
-   
+Sub DeletePatternsInSelection(strPattern As String, posOffsetToStart As Integer, LenthofDeletion As Integer)
+
     Dim myRange As Range
     Dim NumofFound As Long
     Dim numofEnd As Long
@@ -90,7 +91,7 @@ Sub DeletePatternsInSelection(strPattern As String, posToStart As Integer, Lenth
             NumofFound = myRange.Start
             Debug.Print NumofFound
             myRange.Find.Execute FindText:=strPattern, Forward:=True
-            istart = NumofFound + posToStart
+            istart = NumofFound + posOffsetToStart
             ActiveDocument.Range(Start:=istart, End:=istart + Lenthofdel) = ""
         Wend
     End With
@@ -100,7 +101,7 @@ Sub ReplacementWithRef()
 
     Dim sFileName As String
     '
-    sFileName = ActiveDocument.Path & "\replacement.txt"  'ÀÏÎÄ¼þÃû
+    sFileName = ActiveDocument.Path & "\replacement.txt"
 
     '    Debug.Print sFileName
     Dim result1()
