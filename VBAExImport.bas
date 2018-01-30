@@ -1,5 +1,8 @@
 Attribute VB_Name = "UB0VBAExImport"
 Public Sub ExportModules()
+
+If MsgBox("ExportModules? ", vbYesNo + vbCritical + vbDefaultButton2, "ExportModules") = vbNo Then Exit Sub
+
     Dim bExport As Boolean
     Dim wdSource As Document
     Dim szSourcedocument As String
@@ -16,9 +19,9 @@ Public Sub ExportModules()
         Exit Sub
     End If
 
-'    On Error Resume Next
-'    Kill FolderWithVBAProjectFiles & "\*.*"
-'    On Error GoTo 0
+    '    On Error Resume Next
+    '    Kill FolderWithVBAProjectFiles & "\*.*"
+    '    On Error GoTo 0
 
     ''' NOTE: This doc must be opened
     szSourcedocument = ActiveDocument.Name
@@ -36,25 +39,25 @@ Public Sub ExportModules()
 
         bExport = True
         szFileName = cmpComponent.Name
-        If InStr(1, szFileName, "_") > 1 Then
-            Select Case cmpComponent.Type
-                Case vbext_ct_ClassModule
-                    szFileName = szFileName & ".cls"
-                Case vbext_ct_MSForm
-                    szFileName = szFileName & ".frm"
-                Case vbext_ct_StdModule
-                    szFileName = szFileName & ".bas"
-                Case vbext_ct_Document
-                                        ''' Don't try to export.
-                    bExport = False
-            End Select
 
-            If bExport Then
-                ''' Export the component to a text file.
-                cmpComponent.Export szExportPath & szFileName
-                ''' remove it from the project if you want
-                '''wdSource.VBProject.VBComponents.Remove cmpComponent
-            End If
+        Select Case cmpComponent.Type
+            Case vbext_ct_ClassModule
+                szFileName = szFileName & ".cls"
+            Case vbext_ct_MSForm
+                szFileName = szFileName & ".frm"
+            Case vbext_ct_StdModule
+                szFileName = szFileName & ".bas"
+            Case vbext_ct_Document
+                ''' Don't try to export.
+                bExport = False
+        End Select
+
+        If InStr(1, szFileName, "_") > 1 And bExport Then
+            ''' Export the component to a text file.
+            cmpComponent.Export szExportPath & szFileName
+            ''' remove it from the project if you want
+            '''wdSource.VBProject.VBComponents.Remove cmpComponent
+
         End If
     Next cmpComponent
     MsgBox "Export is finished"
@@ -70,11 +73,11 @@ Public Sub ImportModules()
     Dim szFileName As String
     Dim cmpComponents As VBIDE.VBComponents
 
-'    If ActiveDocument.Name = ThisDocument.Name Then
-'        MsgBox "Select another destination document" & _
-'        "Not possible to import in this document "
-'        Exit Sub
-'    End If
+    '    If ActiveDocument.Name = ThisDocument.Name Then
+    '        MsgBox "Select another destination document" & _
+    '        "Not possible to import in this document "
+    '        Exit Sub
+    '    End If
 
     'Get the path to the folder with modules
     If FolderWithVBAProjectFiles = "Error" Then
@@ -96,7 +99,7 @@ Public Sub ImportModules()
     szImportPath = FolderWithVBAProjectFiles & "\"
 
     Set objFSO = New Scripting.FileSystemObject
-    If objFSO.GetFolder(szImportPath).Files.Count = 0 Then
+    If objFSO.GetFolder(szImportPath).Files.count = 0 Then
         MsgBox "There are no files to import"
         Exit Sub
     End If
@@ -109,14 +112,14 @@ Public Sub ImportModules()
     ''' Import all the code modules in the specified path
     ''' to the Activedocument.
     For Each objFile In objFSO.GetFolder(szImportPath).Files
-    
+        If InStr(1, objFile.Name, "_") > 1 Then
 
-        If (objFSO.GetExtensionName(objFile.Name) = "cls") Or _
+            If (objFSO.GetExtensionName(objFile.Name) = "cls") Or _
             (objFSO.GetExtensionName(objFile.Name) = "frm") Or _
             (objFSO.GetExtensionName(objFile.Name) = "bas") Then
-            cmpComponents.Import objFile.Path
+                cmpComponents.Import objFile.Path
+            End If
         End If
-        
 
     Next objFile
 
@@ -124,14 +127,14 @@ Public Sub ImportModules()
 End Sub
 
 Function FolderWithVBAProjectFiles() As String
-'    Dim WshShell As Object
+    '    Dim WshShell As Object
     Dim FSO As Object
     Dim SpecialPath As String
 
-'    Set WshShell = CreateObject("WScript.Shell")
+    '    Set WshShell = CreateObject("WScript.Shell")
     Set FSO = CreateObject("scripting.filesystemobject")
 
-'    SpecialPath = WshShell.SpecialFolders("MyDocuments")
+    '    SpecialPath = WshShell.SpecialFolders("MyDocuments")
     SpecialPath = MYWORKPATH_CODE
 
     If Right(SpecialPath, 1) <> "\" Then

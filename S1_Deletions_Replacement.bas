@@ -14,7 +14,8 @@ If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
 End Sub
 
 
-Sub delContentinMidbracket(Optional rng As Range = Selection)
+Sub delContentinMidbracket(Optional rng As Range)
+     If rng Is Nothing Or IsMissing(rng) Then Set rng = Selection
     With rng
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting

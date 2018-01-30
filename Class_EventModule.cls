@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Event_ClassModule"
+Attribute VB_Name = "Class_EventModule"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -38,7 +38,7 @@ Private Sub App_DocumentBeforeClose(ByVal Doc As Document, Cancel As Boolean)
     If Doc.Name Like "*customer*" Then
 
         Call ExportModules
-        Call showGitHubDesktop
+'        Call showGitHubDesktop
 
     End If
 End Sub
@@ -51,7 +51,7 @@ End Sub
 'End Sub
 '
 Private Sub App_DocumentOpen(ByVal Doc As Document)
-    Call ImportModules
+'    Call ImportModules
 
     Call RightClickNewMenuAmd
     SendKeys "+{F5}"

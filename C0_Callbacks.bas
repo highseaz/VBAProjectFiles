@@ -1,5 +1,5 @@
 Attribute VB_Name = "C0_Callbacks"
-Dim x As New Event_ClassModule
+Dim x As New Class_EventModule
 
 Sub Register_Event_Handler()
  Set x.App = word.Application
@@ -114,6 +114,7 @@ Sub Button_Click(control As IRibbonControl)
             Case "BtnSplit"
             Call splitall
         Case "BtnaddCrossRefParagraph"
+        Call addCrossRefParagraph
 
     End Select
 End Sub
