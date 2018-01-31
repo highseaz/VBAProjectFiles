@@ -115,7 +115,7 @@ Sub Button_Click(control As IRibbonControl)
             Call splitall
         Case "BtnaddCrossRefParagraph"
         Call addCrossRefParagraph
-
+Call addCrossRefParagraph
     End Select
 End Sub
 

@@ -8,6 +8,7 @@ Public Sub RightClickNewMenuAmd()
     Dim comBarName
     comBarName = Array("Lists", "Text")
 '    Debug.Print 1, comBarName(0), comBarName(1)
+Dim i As Integer
 
     For i = 0 To UBound(comBarName)
         With Application.CommandBars(comBarName(i))

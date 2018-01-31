@@ -38,7 +38,7 @@ Private Sub App_DocumentBeforeClose(ByVal Doc As Document, Cancel As Boolean)
     If Doc.Name Like "*customer*" Then
 
         Call ExportModules
-'        Call showGitHubDesktop
+        Call showGitHubDesktop
 
     End If
 End Sub

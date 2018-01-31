@@ -93,16 +93,18 @@ Sub DeletePatternsInSelection(strPattern As String, posOffsetToStart As Integer,
             Debug.Print NumofFound
             myRange.Find.Execute FindText:=strPattern, Forward:=True
             istart = NumofFound + posOffsetToStart
-            ActiveDocument.Range(Start:=istart, End:=istart + Lenthofdel) = ""
+            ActiveDocument.Range(Start:=istart, End:=istart + Lenthofdel).Delete
         Wend
     End With
 
 End Sub
 Sub ReplacementWithRef()
 
+ActiveWindow.View.MarkupMode = wdBalloonRevisions
+
     Dim sFileName As String
     '
-    sFileName = ActiveDocument.Path & "\replacement.txt"
+    sFileName = MYWORKPATH_CODE & "\replacement.txt"
 
     '    Debug.Print sFileName
     Dim result1()
@@ -110,11 +112,12 @@ Sub ReplacementWithRef()
 
 
     For i = 0 To UBound(result1)
-        With Selection.Find
+        With ActiveDocument.Content.Find
             .ClearFormatting
             .Replacement.ClearFormatting
-            .text = result1(i)(0)
-            .Replacement.text = result1(i)(1)
+            .text = Trim(result1(i)(0))
+           
+            .Replacement.text = Trim(result1(i)(1))
             .Forward = True
             .Wrap = wdFindAsk
             .format = False
@@ -123,7 +126,7 @@ Sub ReplacementWithRef()
             .MatchByte = False
             .MatchAllWordForms = False
             .MatchSoundsLike = False
-            .MatchWildcards = result1(i)(2)
+            .MatchWildcards = Trim(result1(i)(2))
             .Execute Replace:=wdReplaceAll
         End With
         Debug.Print result1(i)(0), result1(i)(1), result1(i)(2)

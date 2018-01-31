@@ -20,11 +20,14 @@ Public Property Get ENText() As String
 End Property
 '
 Public Property Get CNText() As String
+
+''todo
+strCNText = transformFrom(strENText)
     CNText = strCNText '''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 End Property
 '
 
-Property Let ENText(str As String)
+Property Let ENText(ByVal str As String)
     strENText = str
 End Property
 
@@ -36,3 +39,7 @@ Public Property Let InfoType(ByVal NewValue As Integer)
     sInfoType = NewValue
 End Property
 
+Function transformFrom(ByVal str As String) As String
+
+transformFrom = "zzz"
+End Function
