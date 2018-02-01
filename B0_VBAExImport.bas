@@ -1,7 +1,6 @@
 Attribute VB_Name = "B0_VBAExImport"
 Public Sub ExportModules()
 
-If MsgBox("ExportModules? ", vbYesNo + vbCritical + vbDefaultButton2, "ExportModules") = vbNo Then Exit Sub
 
     Dim bExport As Boolean
     Dim wdSource As Document

@@ -36,23 +36,16 @@ Private Sub App_DocumentBeforeClose(ByVal Doc As Document, Cancel As Boolean)
     End If
 
     If Doc.Name Like "*customer*" Then
+        If MsgBox("ExportModules? ", vbYesNo + vbCritical + vbDefaultButton2, "ExportModules") = vbYes Then
 
-        Call ExportModules
-        Call showGitHubDesktop
-
+            Call ExportModules
+            Call showGitHubDesktop
+        End If
     End If
 End Sub
 
 
-
-'Private Sub Document_Open()
-''
-''
-'End Sub
-'
 Private Sub App_DocumentOpen(ByVal Doc As Document)
-'    Call ImportModules
-
     Call RightClickNewMenuAmd
     SendKeys "+{F5}"
 End Sub
