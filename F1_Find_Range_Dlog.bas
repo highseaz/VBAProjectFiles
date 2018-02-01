@@ -50,7 +50,7 @@ Function WordfindPositionInText(strPatternFindWhat As String) As Long
         .text = strPatternFindWhat
         .Forward = True
         .Wrap = wdFindStop
-        .format = False
+        .Format = False
         .MatchCase = False
         .MatchWholeWord = False
         .MatchByte = False
@@ -130,7 +130,7 @@ Function ExtractStringByPatternFrom(FindPattern As String, ByVal text As String)
         RE.IgnoreCase = True
     Set allMatches = RE.Execute(text)
     
-    If allMatches.count <> 0 Then
+    If allMatches.Count <> 0 Then
     ' Debug.Print allMatches
         result = allMatches.Item(0)
     Else

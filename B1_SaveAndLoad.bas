@@ -61,7 +61,7 @@ Sub savetofile(ByVal iEOTypes As EnumOfTypes, ByVal strContent As String, Option
 
     Open sFileName For Append As iFileNum
     Print #iFileNum, "# ---------------------------------------------------"
-    Print #iFileNum, "# 保存时间："; format(Now(), "yyyy年MM月dd日 hh:mm:ss")
+    Print #iFileNum, "# 保存时间："; Format(Now(), "yyyy年MM月dd日 hh:mm:ss")
     Print #iFileNum, ""
     Print #iFileNum, iEOTypes; Tab(20); strContent
     Print #iFileNum, ""

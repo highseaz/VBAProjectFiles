@@ -14,7 +14,7 @@ Dim i As Integer
         With Application.CommandBars(comBarName(i))
         
             .Reset
-            Half = Int(.Controls.count / 2) '中间位置
+            Half = Int(.Controls.Count / 2) '中间位置
 
 
             Set NewButton1 = .Controls.Add(Type:=msoControlButton, Before:=Half)

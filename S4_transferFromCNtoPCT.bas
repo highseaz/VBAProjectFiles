@@ -133,7 +133,7 @@ Sub AdjustLineSpaceOfEquationsandGraph()
             .Replacement.text = ""
             .Forward = True
             .Wrap = wdFindContinue
-            .format = False
+            .Format = False
             .MatchCase = False
             .MatchWholeWord = False
             .MatchByte = False

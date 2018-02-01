@@ -22,7 +22,7 @@ Sub delContentinMidbracket(Optional rng As Range)
         With .Find
             .text = "\[*\]"
             .Replacement.text = ""
-            .format = False
+            .Format = False
             .MatchCase = False
             .MatchWholeWord = False
             .MatchByte = False
@@ -120,7 +120,7 @@ ActiveWindow.View.MarkupMode = wdBalloonRevisions
             .Replacement.text = Trim(result1(i)(1))
             .Forward = True
             .Wrap = wdFindAsk
-            .format = False
+            .Format = False
             .MatchCase = False
             .MatchWholeWord = False
             .MatchByte = False

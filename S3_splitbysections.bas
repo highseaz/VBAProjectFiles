@@ -17,7 +17,7 @@ Sub splitBySections()
     spath = sourceDoc.Path
     strBaseFilename = sourceDoc.Name
 
-    For i = 1 To sourceDoc.Sections.count
+    For i = 1 To sourceDoc.Sections.Count
         Set myRange = sourceDoc.Sections(i).Range
         istart = myRange.Start
         iEnd = myRange.End - 1
