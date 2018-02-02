@@ -14,10 +14,10 @@ Sub ConvertAutoNumbersToText()
     End If
 End Sub
 '采用小四，1.5倍行距，不加段号的格式。
-Sub LineSpacingAndFontAdjustment4EP(Optional rng As Range)
+Sub LineSpacingAndFontAdjustment4EP(Optional Rng As Range)
     '
-     If rng Is Nothing Or IsMissing(rng) Then Set rng = Selection
-    With rng
+     If Rng Is Nothing Or IsMissing(Rng) Then Set Rng = Selection
+    With Rng
         .WholeStory
         With .ParagraphFormat
             .LeftIndent = CentimetersToPoints(0)
@@ -45,11 +45,11 @@ Sub LineSpacingAndFontAdjustment4EP(Optional rng As Range)
     End With
 End Sub
 
-Sub AlignParagraphCenter(Optional rng As Range)
-     If rng Is Nothing Or IsMissing(rng) Then Set rng = Selection
+Sub AlignParagraphCenter(Optional Rng As Range)
+     If Rng Is Nothing Or IsMissing(Rng) Then Set Rng = Selection
     '
     '单倍行距，整体居中'
-    With rng
+    With Rng
         With .ParagraphFormat
             .LeftIndent = CentimetersToPoints(0)
             .RightIndent = CentimetersToPoints(0)

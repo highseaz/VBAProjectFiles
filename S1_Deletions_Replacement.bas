@@ -14,14 +14,14 @@ If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
 End Sub
 
 
-Sub delContentinMidbracket(Optional rng As Range)
-     If rng Is Nothing Or IsMissing(rng) Then Set rng = Selection
-    With rng
+Sub delContentinMidbracket(Optional Rng As Range)
+     If Rng Is Nothing Or IsMissing(Rng) Then Set Rng = Selection
+    With Rng
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting
         With .Find
-            .text = "\[*\]"
-            .Replacement.text = ""
+            .Text = "\[*\]"
+            .Replacement.Text = ""
             .Format = False
             .MatchCase = False
             .MatchWholeWord = False
@@ -45,20 +45,20 @@ If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
 
         With .Content
             With .Find
-                .text = "([!a-zA-Z0-9_,.;:\! ])^32{1,}([!a-zA-Z])"
-                .Replacement.text = "\1\2"
+                .Text = "([!a-zA-Z0-9_,.;:\! ])^32{1,}([!a-zA-Z])"
+                .Replacement.Text = "\1\2"
                 .MatchWildcards = True
                 .Execute Replace:=wdReplaceAll
             End With
             With .Find
-                .text = "^32{2,}"
-                .Replacement.text = "^32"
+                .Text = "^32{2,}"
+                .Replacement.Text = "^32"
                 .MatchWildcards = True
                 .Execute Replace:=wdReplaceAll
             End With
             With .Find
-                .text = " ([,.;])"
-                .Replacement.text = "\1"
+                .Text = " ([,.;])"
+                .Replacement.Text = "\1"
                 .MatchWildcards = True
                 .Execute Replace:=wdReplaceAll
             End With
@@ -115,9 +115,9 @@ ActiveWindow.View.MarkupMode = wdBalloonRevisions
         With ActiveDocument.Content.Find
             .ClearFormatting
             .Replacement.ClearFormatting
-            .text = Trim(result1(i)(0))
+            .Text = Trim(result1(i)(0))
            
-            .Replacement.text = Trim(result1(i)(1))
+            .Replacement.Text = Trim(result1(i)(1))
             .Forward = True
             .Wrap = wdFindAsk
             .Format = False

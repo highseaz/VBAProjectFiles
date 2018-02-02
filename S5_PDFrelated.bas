@@ -8,7 +8,7 @@ Sub ExportAsPDFFile(Optional Doc As Document)
         .ExportAsFixedFormat OutputFileName:= _
         .Path & Application.PathSeparator & .Name & ".pdf", _
         ExportFormat:=wdExportFormatPDF, OpenAfterExport:=True, OptimizeFor:= _
-        wdExportOptimizeForPrint, Range:=wdExportAllDocument, From:=1, To:=1, _
+        wdExportOptimizeForPrint, Range:=wdExportAllDocument, From:=1, to:=1, _
         Item:=wdExportDocumentContent, IncludeDocProps:=True, KeepIRM:=True, _
         CreateBookmarks:=wdExportCreateNoBookmarks, DocStructureTags:=True, _
         BitmapMissingFonts:=True, UseISO19005_1:=False

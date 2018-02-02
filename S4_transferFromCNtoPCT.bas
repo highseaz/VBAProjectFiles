@@ -8,7 +8,7 @@ Sub PastefromOriDocToTargetDoc(ByVal sourceDoc As Document, _
                                 Optional ByVal iFormatingtype As Integer = 2)
 
     Set docOriRange = sourceDoc.Range(Start:=Startpoint, End:=Endpoint)
-    PCTContentFormating rng:=docOriRange, Formatingtype:=iFormatingtype
+    PCTContentFormating Rng:=docOriRange, Formatingtype:=iFormatingtype
     docOriRange.Copy
 
     Set targetRange = targetRangePoint
@@ -107,19 +107,19 @@ Else:
 End Sub
 
 Sub addCrossRefParagraph()
-       Dim rng As Range
+       Dim Rng As Range
     With ActiveDocument
         bTrack = .TrackRevisions
         For i = 0 To 1
-            Set rng = RangeIncludingStr(PasteInsitu(i), ActiveDocument, True)
-            Start = rng.Start
+            Set Rng = RangeIncludingStr(PasteInsitu(i), ActiveDocument, True)
+            Start = Rng.Start
 
             .TrackRevisions = False
-            rng.Cut
+            Rng.Cut
             .TrackRevisions = True
             .Range(Start, Start).Paste
         Next
-        Set rng = Nothing
+        Set Rng = Nothing
         .TrackRevisions = bTrack
     End With
 
@@ -129,8 +129,8 @@ Sub AdjustLineSpaceOfEquationsandGraph()
     Selection.Find.ClearFormatting
     With Selection
         With .Find
-            .text = "^g"
-            .Replacement.text = ""
+            .Text = "^g"
+            .Replacement.Text = ""
             .Forward = True
             .Wrap = wdFindContinue
             .Format = False
@@ -193,11 +193,11 @@ Sub AdjustTextOfTables()
     Next
 End Sub
 
-Public Sub PCTContentFormating(ByVal rng As Range, Optional ByVal Formatingtype As Integer = 2)
+Public Sub PCTContentFormating(ByVal Rng As Range, Optional ByVal Formatingtype As Integer = 2)
     '1 is title 2 is content
     '3 is drawing
 
-    With rng
+    With Rng
         With .ParagraphFormat
             .LeftIndent = CentimetersToPoints(0)
             .RightIndent = CentimetersToPoints(0)

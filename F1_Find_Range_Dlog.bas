@@ -20,7 +20,7 @@ Function RangeIncludingStr(findwhat As String, ByVal Doc As Document, Optional B
     RE.IgnoreCase = True
     RE.Global = True
     For Each para In Doc.Paragraphs
-        If RE.test(para.Range.text) Then
+        If RE.test(para.Range.Text) Then
             icount = icount + 1
             
             Set rang = para.Range
@@ -47,7 +47,7 @@ Function WordfindPositionInText(strPatternFindWhat As String) As Long
         .ClearFormatting
         .Replacement.ClearFormatting
 
-        .text = strPatternFindWhat
+        .Text = strPatternFindWhat
         .Forward = True
         .Wrap = wdFindStop
         .Format = False
@@ -119,7 +119,7 @@ Public Function SelectedFileWithDlog() As String
 End Function
 
 
-Function ExtractStringByPatternFrom(FindPattern As String, ByVal text As String) As String
+Function ExtractStringByPatternFrom(FindPattern As String, ByVal Text As String) As String
     Dim result As String
     Dim allMatches As Object
     Dim RE As Object
@@ -128,7 +128,7 @@ Function ExtractStringByPatternFrom(FindPattern As String, ByVal text As String)
         RE.Pattern = FindPattern
         RE.Global = True
         RE.IgnoreCase = True
-    Set allMatches = RE.Execute(text)
+    Set allMatches = RE.Execute(Text)
     
     If allMatches.Count <> 0 Then
     ' Debug.Print allMatches

@@ -78,12 +78,12 @@ Private Sub InitializeInfo(myDocument As Document)
 
             RE.Pattern = dic.Items(issueTypeNo) '
 
-            If RE.test(para.Range.text) Then
+            If RE.test(para.Range.Text) Then
 
                 ReDim Preserve IssuesTextSet(0 To IssuesCount)
 
                 Dim newIssuesText As New Class_IssuesText
-                newIssuesText.ENText = para.Range.text
+                newIssuesText.ENText = para.Range.Text
                 newIssuesText.InfoType = dic.Keys(issueTypeNo) '
 
                 Set IssuesTextSet(IssuesCount) = newIssuesText

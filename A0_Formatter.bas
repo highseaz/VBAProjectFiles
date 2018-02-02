@@ -170,8 +170,8 @@ Public Sub testFormatting()
     moduleName = "Test"
     Dim vbaProject As VBProject
     Set vbaProject = Application.VBE.VBProjects(projName)
-    Dim code As codeModule
-    Set code = vbaProject.VBComponents(moduleName).codeModule
+    Dim code As CodeModule
+    Set code = vbaProject.VBComponents(moduleName).CodeModule
 
     'removeIndentation code
     'formatCode code
@@ -179,22 +179,22 @@ Public Sub testFormatting()
 End Sub
 
 Public Sub formatProject(vbaProject As VBProject)
-    Dim codePane As codeModule
+    Dim codePane As CodeModule
 
     Dim component As Variant
     For Each component In vbaProject.VBComponents
-        Set codePane = component.codeModule
+        Set codePane = component.CodeModule
         Debug.Print "Formatting " & component.Name
         formatCode codePane
     Next
 End Sub
 
 Public Sub codeformat()
-    formatCode Application.VBE.ActiveCodePane.codeModule
+    formatCode Application.VBE.ActiveCodePane.CodeModule
 End Sub
 
 
-Public Sub formatCode(codePane As codeModule)
+Public Sub formatCode(codePane As CodeModule)
     On Error GoTo formatCodeError
     Dim lineCount As Integer
     lineCount = codePane.CountOfLines
@@ -205,7 +205,7 @@ Public Sub formatCode(codePane As codeModule)
     Dim lineNr As Integer
     For lineNr = 1 To lineCount
         Dim line As String
-        line = Trim(codePane.lines(lineNr, 1))
+        line = Trim(codePane.Lines(lineNr, 1))
         If Not line = "" Then
             If isEqual(ONEWORD_ELSE, line) _
                 Or lineStartsWith(BEG_END_ELSEIF, line) _
@@ -246,14 +246,14 @@ formatCodeError:
 End Sub
 
 
-Public Sub removeIndentation(codePane As codeModule)
+Public Sub removeIndentation(codePane As CodeModule)
     Dim lineCount As Integer
     lineCount = codePane.CountOfLines
 
     Dim lineNr As Integer
     For lineNr = 1 To lineCount
         Dim line As String
-        line = codePane.lines(lineNr, 1)
+        line = codePane.Lines(lineNr, 1)
         line = Trim(line)
         Call codePane.ReplaceLine(lineNr, line)
     Next

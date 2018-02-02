@@ -16,8 +16,8 @@ Sub addReferenceNumber4str(str As String, num As String, Rangetobeamended As Ran
     RE.Global = True
     RE.IgnoreCase = True
 
-    If RE.test(Rangetobeamended.text) Then
-        Set allMatches = RE.Execute(Rangetobeamended.text)
+    If RE.test(Rangetobeamended.Text) Then
+        Set allMatches = RE.Execute(Rangetobeamended.Text)
         For i = 0 To allMatches.Count - 1
             strFound = allMatches(i).submatches(0)
             istart = Rangetobeamended.Start + allMatches(i).firstindex

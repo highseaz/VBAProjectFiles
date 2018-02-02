@@ -55,16 +55,16 @@ Sub InsertSectionBreak(pagebreakerNO As Integer)
         With oRng.Find
             .ClearFormatting
             .MatchWildcards = False
-            .text = "^m"
+            .Text = "^m"
             .Execute
         End With
 
-        s = oRng.Start
-        If s < 2 Then Exit Sub
-        Debug.Print s
-        Debug.Print ActiveDocument.Range(s, s + 1).text
-        ActiveDocument.Range(s, s + 1) = ""
-        ActiveDocument.Range(s, s + 1).InsertBreak wdSectionBreakNextPage
+        S = oRng.Start
+        If S < 2 Then Exit Sub
+        Debug.Print S
+        Debug.Print ActiveDocument.Range(S, S + 1).Text
+        ActiveDocument.Range(S, S + 1) = ""
+        ActiveDocument.Range(S, S + 1).InsertBreak wdSectionBreakNextPage
 
     Next
 
