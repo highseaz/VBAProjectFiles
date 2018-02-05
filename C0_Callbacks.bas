@@ -2,15 +2,15 @@ Attribute VB_Name = "C0_Callbacks"
 Dim x As New Class_EventModule
 
 Sub Register_Event_Handler()
- Set x.App = word.Application
+    Set x.App = word.Application
 End Sub
 
 
 'Callback for customUI.onLoad
 Sub rxiRibbonUI_onLoad(ribbon As IRibbonUI)
-'VBA.SendKeys "+{F5}"
-Call RightClickNewMenuAmd
-Call Register_Event_Handler
+    'VBA.SendKeys "+{F5}"
+    Call RightClickNewMenuAmd
+    Call Register_Event_Handler
 End Sub
 
 
@@ -44,7 +44,7 @@ Sub but_getLabel(control As IRibbonControl, ByRef returnedVal)
             returnedVal = "调整图片格式" & Chr(13)
         Case "BtnaddCrossRefParagraph"
             returnedVal = "加入交叉引用段落" & Chr(13)
- Case "BtnSplit"
+        Case "BtnSplit"
             returnedVal = "拆分PCT文件" & Chr(13)
 
 
@@ -59,6 +59,17 @@ Sub but_getLabel(control As IRibbonControl, ByRef returnedVal)
             returnedVal = "去除自动编号" & Chr(13)
 
 
+        Case "BtnSaveDocVarsFile"
+            returnedVal = "保存域文件" & Chr(13)
+        Case "BtnloadDocVarsFile"
+            returnedVal = "加载域文件" & Chr(13)
+        Case "BtnUnlinkDocVarFields"
+            returnedVal = "解除域" & Chr(13)
+        Case "BtnUpdateSelectDocVar"
+            returnedVal = "更新域变量" & Chr(13)
+        Case "BtnChangeStrToFieldWithDiag2"
+            returnedVal = "转化为域" & Chr(13)
+
     End Select
 End Sub
 
@@ -71,11 +82,11 @@ Sub Button_Click(control As IRibbonControl)
 
         Case "SpBnReplace__btn"
             Call ReplacementWithRef
-'            Call ReplacementWithoutMatchWildcards
+            '            Call ReplacementWithoutMatchWildcards
         Case "BtnReplacewithWildchar"
             Call ReplacementWithRef
         Case "BtnReplacewithoutWildchar"
-'            Call ReplacementWithoutMatchWildcards
+            '            Call ReplacementWithoutMatchWildcards
 
         Case "SpBnDelete__btn"
             Call delSpace
@@ -104,18 +115,31 @@ Sub Button_Click(control As IRibbonControl)
             Call transferFromCNtoPCT
             Call AdjustTextOfTables
             Call AdjustLineSpaceOfEquationsandGraph
-'            Call addCrossRefParagraph
+            '            Call addCrossRefParagraph
         Case "BtnPCTformat"
             Call transferFromCNtoPCT
         Case "BtnAdjTables"
             Call AdjustTextOfTables
         Case "BtnAdjGraphs"
             Call AdjustLineSpaceOfEquationsandGraph
-            Case "BtnSplit"
+        Case "BtnSplit"
             Call splitall
         Case "BtnaddCrossRefParagraph"
-        Call addCrossRefParagraph
-Call addCrossRefParagraph
+            Call addCrossRefParagraph
+
+
+
+        Case "BtnSaveDocVarsFile"
+            Call saveDocVarsFile
+        Case "BtnloadDocVarsFile"
+            Call loadDocVarsFile
+        Case "BtnUnlinkDocVarFields"
+            Call unlinkDocVarFields
+        Case "BtnUpdateSelectDocVar"
+            Call updateSelectDocVar
+        Case "BtnChangeStrToFieldWithDiag2"
+            Call changeStrToFieldWithDiag2
+
     End Select
 End Sub
 

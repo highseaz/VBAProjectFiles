@@ -196,27 +196,46 @@ Sub ShowProcedureInfo2()
     Dim ProcKind As VBIDE.vbext_ProcKind
     Dim PInfo As ProcInfo
 
+    Dim wdTable As Table
+    Dim rowNew As Row
+
+    Set wdTable = ActiveDocument.Tables(1)
+
+
     For Each VBComp In ActiveDocument.VBProject.VBComponents
         If VBComp.Type <> vbext_ct_StdModule Then GoTo next_comp
 
         CompName = VBComp.Name
         If InStr(1, CompName, "_") < 1 Then GoTo next_comp
 
+        Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
+        rowNew.Cells.Merge
+
+        wdTable.Cell(rowNew.Index, 1).Range.InsertAfter CompName
+
+        rowNew.Alignment = wdAlignRowCenter
+        rowNew.Shading.BackgroundPatternColor = wdColorYellow
+
         Set CodeMod = VBComp.CodeModule
+
         With CodeMod
             LineNum = .CountOfDeclarationLines + 1
             Do Until LineNum >= .CountOfLines
+
                 ProcName = .ProcOfLine(LineNum, ProcKind)
-  
+
                 LineNum = .ProcStartLine(ProcName, ProcKind) + _
                     .ProcCountLines(ProcName, ProcKind) + 1
-                    
+
                 PInfo = ProcedureInfo(ProcName, ProcKind, CodeMod)
-                
-                Debug.Print CompName
-                Debug.Print "ProcName: " & PInfo.ProcName
-                Debug.Print "ProcDeclaration: " & PInfo.ProcDeclaration
-                Debug.Print ""
+
+                Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
+                wdTable.Cell(rowNew.Index, 1).Range.InsertAfter PInfo.ProcDeclaration
+
+                '                Debug.Print CompName
+                '                Debug.Print "ProcName: " & PInfo.ProcName
+                '                Debug.Print "ProcDeclaration: " & PInfo.ProcDeclaration
+                '                Debug.Print ""
             Loop
         End With
 
