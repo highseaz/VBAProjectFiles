@@ -11,7 +11,7 @@ Option Explicit
 
 Private IssuesCount As Integer
 Private IssuesTextSet() As Class_IssuesText
-Private dic As Scripting.Dictionary
+Private dic As Object
 
 Private myDocPath As String
 
@@ -65,7 +65,7 @@ Private Sub InitializeInfo(myDocument As Document)
 
 
     Dim RE As Object
-    Dim issueTypeNo As Integer
+    Dim i As Integer
     Dim para As Paragraph
     IssuesCount = 0
 
@@ -74,9 +74,9 @@ Private Sub InitializeInfo(myDocument As Document)
     RE.Global = True
     For Each para In myDocument.Paragraphs
 
-        For issueTypeNo = 0 To dic.Count - 1
+        For i = 1 To dic.Count
 
-            RE.Pattern = dic.Items(issueTypeNo) '
+            RE.Pattern = dic(i)("IssuePattern") '
 
             If RE.test(para.Range.Text) Then
 
@@ -84,7 +84,7 @@ Private Sub InitializeInfo(myDocument As Document)
 
                 Dim newIssuesText As New Class_IssuesText
                 newIssuesText.ENText = para.Range.Text
-                newIssuesText.InfoType = dic.Keys(issueTypeNo) '
+                newIssuesText.InfoType = dic(i)("IssueType") '
 
                 Set IssuesTextSet(IssuesCount) = newIssuesText
 
@@ -92,7 +92,7 @@ Private Sub InitializeInfo(myDocument As Document)
 
                 Set newIssuesText = Nothing
             End If
-        Next issueTypeNo
+        Next i
     Next para
     Set para = Nothing
 
@@ -100,6 +100,7 @@ End Sub
 
 Private Sub Class_Initialize()
 
-    Set dic = OAPatternTypesDic
+'    Set dic = OAPatternTypesDic
+     Set dic = ParsedReadJson("OAPatternTypes")
 
 End Sub
