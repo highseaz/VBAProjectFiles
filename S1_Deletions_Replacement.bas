@@ -1,7 +1,7 @@
 Attribute VB_Name = "S1_Deletions_Replacement"
 Sub DelBlankPara(Optional Doc As Document)
 
-If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
+    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
     Application.ScreenUpdating = False
     For Each i In Doc.Paragraphs
         If Len(Trim(i.Range)) = 1 Then
@@ -15,7 +15,7 @@ End Sub
 
 
 Sub delContentinMidbracket(Optional Rng As Range)
-     If Rng Is Nothing Or IsMissing(Rng) Then Set Rng = Selection
+    If Rng Is Nothing Or IsMissing(Rng) Then Set Rng = Selection
     With Rng
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting
@@ -36,7 +36,7 @@ End Sub
 
 Sub delSpace(Optional Doc As Document)
 
-If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
+    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
 
     With Doc
         trackflag = .TrackRevisions
@@ -100,7 +100,7 @@ Sub DeletePatternsInSelection(strPattern As String, posOffsetToStart As Integer,
 End Sub
 Sub ReplacementWithRef()
 
-ActiveWindow.View.MarkupMode = wdBalloonRevisions
+    ActiveWindow.View.MarkupMode = wdBalloonRevisions
 
     Dim sFileName As String
     '
@@ -116,7 +116,7 @@ ActiveWindow.View.MarkupMode = wdBalloonRevisions
             .ClearFormatting
             .Replacement.ClearFormatting
             .Text = Trim(result1(i)(0))
-           
+
             .Replacement.Text = Trim(result1(i)(1))
             .Forward = True
             .Wrap = wdFindAsk
@@ -135,4 +135,21 @@ ActiveWindow.View.MarkupMode = wdBalloonRevisions
 End Sub
 
 
+Function StrReplaceSpecialChars(ByVal str As String, sChr As String, Optional sLen As Integer = 20)
+    Dim s As String
+    s = Replace(str, "'", sChr)
+    s = Replace(s, "*", sChr)
+    s = Replace(s, "/", sChr)
+    s = Replace(s, "\", sChr)
+    s = Replace(s, ":", sChr)
+    s = Replace(s, "?", sChr)
+    s = Replace(s, Chr(34), sChr)
+    s = Replace(s, "<", sChr)
+    s = Replace(s, ">", sChr)
+    s = Replace(s, "|", sChr)
+    s = Replace(s, " ", sChr)
+    Debug.Print s
 
+    StrReplaceSpecialChars = Left(s, sLen)
+
+End Function

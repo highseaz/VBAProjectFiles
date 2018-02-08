@@ -101,6 +101,6 @@ End Sub
 Private Sub Class_Initialize()
 
 '    Set dic = OAPatternTypesDic
-     Set dic = ParsedReadJson("OAPatternTypes")
+     Set dic = JsonReadFromConfFile("OAPatternTypes")
 
 End Sub

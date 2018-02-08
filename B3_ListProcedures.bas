@@ -74,7 +74,7 @@ Function GetProcedureDeclaration(CodeMod As VBIDE.CodeModule, _
     ' The function returns vbNullString if the procedure could not be found.
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     Dim LineNum As Long
-    Dim S As String
+    Dim s As String
     Dim Declaration As String
 
     On Error Resume Next
@@ -82,21 +82,21 @@ Function GetProcedureDeclaration(CodeMod As VBIDE.CodeModule, _
     If Err.Number <> 0 Then
         Exit Function
     End If
-    S = CodeMod.Lines(LineNum, 1)
-    Do While Right(S, 1) = "_"
+    s = CodeMod.Lines(LineNum, 1)
+    Do While Right(s, 1) = "_"
         Select Case True
             Case LineSplitBehavior = LineSplitConvert
-                S = Left(S, Len(S) - 1) & vbNewLine
+                s = Left(s, Len(s) - 1) & vbNewLine
             Case LineSplitBehavior = LineSplitKeep
-                S = S & vbNewLine
+                s = s & vbNewLine
             Case LineSplitBehavior = LineSplitRemove
-                S = Left(S, Len(S) - 1) & " "
+                s = Left(s, Len(s) - 1) & " "
         End Select
-        Declaration = Declaration & S
+        Declaration = Declaration & s
         LineNum = LineNum + 1
-        S = CodeMod.Lines(LineNum, 1)
+        s = CodeMod.Lines(LineNum, 1)
     Loop
-    Declaration = SingleSpace(Declaration & S)
+    Declaration = SingleSpace(Declaration & s)
     GetProcedureDeclaration = Declaration
 End Function
 
@@ -157,10 +157,10 @@ Sub ListProcedures()
 
         Do Until LineNum >= .CountOfLines
             ProcName = .ProcOfLine(LineNum, ProcKind)
-            S = .Lines(LineNum, 1)
+            s = .Lines(LineNum, 1)
 
             Debug.Print ProcName
-            Debug.Print S
+            Debug.Print s
             LineNum = .ProcStartLine(ProcName, ProcKind) + _
                     .ProcCountLines(ProcName, ProcKind) + 1
 

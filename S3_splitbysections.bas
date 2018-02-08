@@ -23,10 +23,10 @@ Sub splitBySections()
         iEnd = myRange.End - 1
         sourceDoc.Range(istart, iEnd).Copy
 
-        Set tarDoc = word.Documents.Add(Visible:=False, Template:=TEMPLATEFullPath)
+        Set tarDoc = word.Documents.Add(Visible:=False, Template:=TEMPLATE_Null)
         tarDoc.Content.PasteAndFormat (wdFormatOriginalFormatting)
 
-        strNewFileName = Replace(strBaseFilename, ".do", "_" & strNamebySectionNo(i) & ".do")
+        strNewFileName = Replace(strBaseFilename, ".do", "_" & PrintSectionNames(i) & ".do")
         strNewFileName = Replace(strNewFileName, ".", "_")
         strNewFileName = Replace(strNewFileName, "_doc", ".doc")
 
@@ -59,12 +59,12 @@ Sub InsertSectionBreak(pagebreakerNO As Integer)
             .Execute
         End With
 
-        S = oRng.Start
-        If S < 2 Then Exit Sub
-        Debug.Print S
-        Debug.Print ActiveDocument.Range(S, S + 1).Text
-        ActiveDocument.Range(S, S + 1) = ""
-        ActiveDocument.Range(S, S + 1).InsertBreak wdSectionBreakNextPage
+        s = oRng.Start
+        If s < 2 Then Exit Sub
+        Debug.Print s
+        Debug.Print ActiveDocument.Range(s, s + 1).Text
+        ActiveDocument.Range(s, s + 1) = ""
+        ActiveDocument.Range(s, s + 1).InsertBreak wdSectionBreakNextPage
 
     Next
 

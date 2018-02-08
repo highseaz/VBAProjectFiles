@@ -55,7 +55,7 @@ exit_func:
 End Function
 '将文件保存到固定的目录
 Sub savetofile(ByVal iEOTypes As EnumOfTypes, ByVal strContent As String, Optional ByVal sFileName As String)
- 
+
     Dim iFileNum As Integer
     iFileNum = FreeFile()
 
@@ -68,5 +68,47 @@ Sub savetofile(ByVal iEOTypes As EnumOfTypes, ByVal strContent As String, Option
     Print #iFileNum, "# ---------------------------------------------------"
     Close iFileNum
     Shell "Notepad.exe " & sFileName, vbNormalFocus
+End Sub
+
+Sub ConvertFileEncode(InputFile As String, OutputFile As String, Optional InputFileCode As String = "UNICODE", Optional OutputFileCode As String = "UTF-8")
+    'http://www.cppblog.com/sunicdavy/archive/2012/09/13/190553.html'
+    Dim ReadStream As Object
+    Set ReadStream = CreateObject("ADODB.Stream")
+
+    Dim FileContent As String
+
+    With ReadStream
+        .Type = 2               'adTypeText
+        .Charset = InputFileCode
+        .Open
+        .LoadFromFile InputFile
+        FileContent = .ReadText
+        .Close
+
+    End With
+
+    Set ReadStream = Nothing
+
+
+
+    Dim WriteStream As Object
+    Set WriteStream = CreateObject("ADODB.Stream")
+
+
+    With WriteStream
+        .Type = 2               'adTypeText
+        .Charset = OutputFileCode
+        .Open
+        .WriteText FileContent
+        .savetofile OutputFile, 2  'adSaveCreateOverWrite
+
+        .Flush
+        .Close
+
+    End With
+
+    Set WriteStream = Nothing
+
+
 End Sub
 

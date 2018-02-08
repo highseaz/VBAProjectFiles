@@ -25,7 +25,7 @@ Sub transferFromCNtoPCT()
     Dim docNew As Document
     Dim docOri As Document
 
-    Set docNew = Documents.Open(TEMPLATEFullPath2)
+    Set docNew = Documents.Open(TEMPLATE_Full)
     oridir = SelectedFileWithDlog
     Set docOri = Documents.Open(oridir) '  Set docOri = SelectedFileWithDlog
 
@@ -34,35 +34,35 @@ Sub transferFromCNtoPCT()
     Dim atype(10) As Integer
 
     ''-----------------寻找位置需要更精炼，而且不适用在页眉的情况---------------
-    aStart(1) = RangeIncludingStr(strDelimiter(0), docOri).End + 1
-    If Not RangeIncludingStr(strDelimiter(1), docOri) Is Nothing Then
-        aEnd(1) = RangeIncludingStr(strDelimiter(1), docOri).Start - 1
+    aStart(1) = RangeIncludingStr(PCTSplitDelimiter(0), docOri).End + 1
+    If Not RangeIncludingStr(PCTSplitDelimiter(1), docOri) Is Nothing Then
+        aEnd(1) = RangeIncludingStr(PCTSplitDelimiter(1), docOri).Start - 1
     Else
-        aEnd(1) = RangeIncludingStr(strDelimiter(2), docOri).Start - 1
+        aEnd(1) = RangeIncludingStr(PCTSplitDelimiter(2), docOri).Start - 1
     End If
 
     Set tgtpnt(1) = docNew.Bookmarks(3).Range.Next.Next
 
     ''---------------------------------------------------------------------
-    aStart(2) = RangeIncludingStr(strDelimiter(2), docOri).End + 1
-    aEnd(2) = RangeIncludingStr(strDelimiter(3), docOri).Start - 1
+    aStart(2) = RangeIncludingStr(PCTSplitDelimiter(2), docOri).End + 1
+    aEnd(2) = RangeIncludingStr(PCTSplitDelimiter(3), docOri).Start - 1
     Set tgtpnt(2) = docNew.Bookmarks(2).Range.Next.Next
     ''----------------------------------------------------------------------------
-    aStart(3) = RangeIncludingStr(strDelimiter(3), docOri).End + 1
-    aEnd(3) = RangeIncludingStr(strDelimiter(4), docOri).Start - 1
+    aStart(3) = RangeIncludingStr(PCTSplitDelimiter(3), docOri).End + 1
+    aEnd(3) = RangeIncludingStr(PCTSplitDelimiter(4), docOri).Start - 1
     Set tgtpnt(3) = docNew.Bookmarks(1).Range.Next
     ''format1
     ''-----------------------------------------------
 
     For i = 4 To 8
-        aStart(i) = RangeIncludingStr(strDelimiter(i), docOri).End
-        aEnd(i) = RangeIncludingStr(strDelimiter(i + 1), docOri).Start - 1
-        Set tgtpnt(i) = RangeIncludingStr(strDelimiter(i), docNew)
+        aStart(i) = RangeIncludingStr(PCTSplitDelimiter(i), docOri).End
+        aEnd(i) = RangeIncludingStr(PCTSplitDelimiter(i + 1), docOri).Start - 1
+        Set tgtpnt(i) = RangeIncludingStr(PCTSplitDelimiter(i), docNew)
 
     Next i
 
     ''-------------------------------------------------------------------
-    aStart(9) = RangeIncludingStr(strDelimiter(9), docOri).End
+    aStart(9) = RangeIncludingStr(PCTSplitDelimiter(9), docOri).End
     aEnd(9) = docOri.Paragraphs.Last.Range.End
     Set tgtpnt(9) = docNew.Bookmarks(4).Range.Next.Next
     'format3
