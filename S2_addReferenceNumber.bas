@@ -10,17 +10,17 @@ Sub addReferenceNumber4str(str As String, num As String, Rangetobeamended As Ran
     rangst = Rangetobeamended.Start
 
     Dim strFound As String
-    Dim RE As Object
-    Set RE = CreateObject("vbscript.regexp")
-    RE.Pattern = "(" & str & "(s|es)?)([,.;]|\s(?!\())"
-    RE.Global = True
-    RE.IgnoreCase = True
+    Dim re As Object
+    Set re = CreateObject("vbscript.regexp")
+    re.Pattern = "(" & str & "(s|es)?)([,.;]|\s(?!\())"
+    re.Global = True
+    re.IgnoreCase = True
 
-    If RE.test(Rangetobeamended.Text) Then
-        Set allMatches = RE.Execute(Rangetobeamended.Text)
+    If re.test(Rangetobeamended.Text) Then
+        Set allMatches = re.Execute(Rangetobeamended.Text)
         For i = 0 To allMatches.Count - 1
             strFound = allMatches(i).submatches(0)
-            istart = Rangetobeamended.Start + allMatches(i).firstindex
+            istart = Rangetobeamended.Start + allMatches(i).FirstIndex
             iEnd = istart + Len(strFound) + Len(num) * i
             Debug.Print "找到的字符串为‘" & strFound & "’;其长度为" & Len(strFound) & ";共找到" & i & "个。"
             ActiveDocument.Range(Start:=istart, End:=iEnd).InsertAfter num

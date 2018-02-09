@@ -76,9 +76,9 @@ Function PCTSplitDelimiter(ByVal iNo As Integer) As String
         PCTSplitDelimiter = ""
     End If
 End Function
-Function PasteInsitu(ByVal iNo As Integer) As String
-    PasteInsitu = JsonReadFromConfFile("PasteInsitu")(iNo)
-End Function
+'Function PasteInsitu(ByVal iNo As Integer) As String
+'    PasteInsitu = JsonReadFromConfFile("PasteInsitu")(iNo)
+'End Function
 
 
 'Function OAPatternTypesDic() As Scripting.Dictionary

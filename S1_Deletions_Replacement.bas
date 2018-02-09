@@ -14,9 +14,9 @@ Sub DelBlankPara(Optional Doc As Document)
 End Sub
 
 
-Sub delContentinMidbracket(Optional Rng As Range)
-    If Rng Is Nothing Or IsMissing(Rng) Then Set Rng = Selection
-    With Rng
+Sub delContentinMidbracket(Optional rng As Range)
+    If rng Is Nothing Or IsMissing(rng) Then Set rng = Selection
+    With rng
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting
         With .Find

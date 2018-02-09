@@ -64,21 +64,21 @@ End Property
 Private Sub InitializeInfo(myDocument As Document)
 
 
-    Dim RE As Object
+    Dim re As Object
     Dim i As Integer
     Dim para As Paragraph
     IssuesCount = 0
 
-    Set RE = CreateObject("VBScript.RegExp")
-    RE.IgnoreCase = True
-    RE.Global = True
+    Set re = CreateObject("VBScript.RegExp")
+    re.IgnoreCase = True
+    re.Global = True
     For Each para In myDocument.Paragraphs
 
         For i = 1 To dic.Count
 
-            RE.Pattern = dic(i)("IssuePattern") '
+            re.Pattern = dic(i)("IssuePattern") '
 
-            If RE.test(para.Range.Text) Then
+            If re.test(para.Range.Text) Then
 
                 ReDim Preserve IssuesTextSet(0 To IssuesCount)
 

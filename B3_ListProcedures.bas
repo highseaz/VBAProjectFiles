@@ -145,7 +145,7 @@ Sub ListProcedures()
     Dim LineNum As Long
     Dim NumLines As Long
     '    Dim WS As Worksheet
-    Dim Rng As Range
+    Dim rng As Range
     Dim ProcName As String
     Dim ProcKind As VBIDE.vbext_ProcKind
 

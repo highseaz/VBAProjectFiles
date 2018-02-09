@@ -44,7 +44,6 @@ Private Sub App_DocumentBeforeClose(ByVal Doc As Document, Cancel As Boolean)
     End If
 End Sub
 
-
 Private Sub App_DocumentOpen(ByVal Doc As Document)
     Call RightClickNewMenuAmd
     SendKeys "+{F5}"

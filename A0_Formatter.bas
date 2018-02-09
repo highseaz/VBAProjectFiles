@@ -76,7 +76,7 @@ Private Enum StringStatus
     NotInString
 End Enum
 
-Private Sub initialize()
+Private Sub Initialize()
     initializeWords
     initializeIndentation
 End Sub
@@ -153,14 +153,14 @@ End Sub
 
 Private Property Get vbaWords() As Scripting.Dictionary
     If words Is Nothing Then
-        initialize
+        Initialize
     End If
     Set vbaWords = words
 End Property
 
 Public Sub testFormatting()
     If words Is Nothing Then
-        initialize
+        Initialize
     End If
     'Debug.Print Application.VBE.ActiveCodePane.codePane.Parent.Name
     'Debug.Print Application.VBE.ActiveWindow.caption

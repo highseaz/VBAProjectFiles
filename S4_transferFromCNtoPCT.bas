@@ -8,7 +8,7 @@ Sub PastefromOriDocToTargetDoc(ByVal sourceDoc As Document, _
                                 Optional ByVal iFormatingtype As Integer = 2)
 
     Set docOriRange = sourceDoc.Range(Start:=Startpoint, End:=Endpoint)
-    PCTContentFormating Rng:=docOriRange, Formatingtype:=iFormatingtype
+    PCTContentFormating rng:=docOriRange, Formatingtype:=iFormatingtype
     docOriRange.Copy
 
     Set targetRange = targetRangePoint
@@ -107,21 +107,26 @@ Else:
 End Sub
 
 Sub addCrossRefParagraph()
-       Dim Rng As Range
+    Dim rng As Range
+    Dim PasteInsitu As Object
+    Set PasteInsitu = JsonReadFromConfFile("PasteInsitu")
     With ActiveDocument
         bTrack = .TrackRevisions
-        For i = 0 To 1
-            Set Rng = RangeIncludingStr(PasteInsitu(i), ActiveDocument, True)
-            Start = Rng.Start
+        For i = 1 To PasteInsitu.Count
+            Set rng = RangeIncludingStr(PasteInsitu(i), ActiveDocument, True)
+            Start = rng.Start
 
             .TrackRevisions = False
-            Rng.Cut
+            rng.Cut
             .TrackRevisions = True
             .Range(Start, Start).Paste
         Next
-        Set Rng = Nothing
+        Set rng = Nothing
         .TrackRevisions = bTrack
     End With
+
+    Set PasteInsitu = Nothing
+
 
 End Sub
 
@@ -193,11 +198,11 @@ Sub AdjustTextOfTables()
     Next
 End Sub
 
-Public Sub PCTContentFormating(ByVal Rng As Range, Optional ByVal Formatingtype As Integer = 2)
+Public Sub PCTContentFormating(ByVal rng As Range, Optional ByVal Formatingtype As Integer = 2)
     '1 is title 2 is content
     '3 is drawing
 
-    With Rng
+    With rng
         With .ParagraphFormat
             .LeftIndent = CentimetersToPoints(0)
             .RightIndent = CentimetersToPoints(0)
@@ -251,9 +256,9 @@ Sub acceptFormatChanges()
         .ShowFormatChanges = True
         '        .ShowRevisionsAndComments = False
         .ShowInsertionsAndDeletions = False
-        
-         ActiveDocument.AcceptAllRevisionsShown
-         
+
+        ActiveDocument.AcceptAllRevisionsShown
+
         .ShowRevisionsAndComments = True
         .ShowFormatChanges = True
         .ShowInsertionsAndDeletions = True

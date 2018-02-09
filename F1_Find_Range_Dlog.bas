@@ -1,32 +1,32 @@
 Attribute VB_Name = "F1_Find_Range_Dlog"
-Function RangeIncludingStr(findwhat As String, ByVal Doc As Document, Optional ByVal spaceSenstive As Boolean = False) As Range
+Function RangeIncludingStr(ByVal findwhat As String, ByVal Doc As Document, Optional ByVal spaceSenstive As Boolean = False) As Range
     '查找特定字符所在区域
 
     'reference：
     'https://www.experts-exchange.com/articles/1336/Using-Regular-Expressions-in-Visual-Basic-for-Applications-and-Visual-Basic-6.html
     'https://stackoverflow.com/questions/11354909/regex-word-macro-that-finds-two-words-within-a-range-of-each-other-and-then-ital
 
-    Dim RE As Object
+    Dim re As Object
     Dim para As Paragraph
     Dim rang As Range
-    icount = 0
+    iCount = 0
 
-    Set RE = CreateObject("VBScript.RegExp")
+    Set re = CreateObject("VBScript.RegExp")
     If spaceSenstive Then
-        RE.Pattern = findwhat
+        re.Pattern = findwhat
     Else
-        RE.Pattern = addStrBetweenEachChr(findwhat, " *") & "([a-z0-9\- ]*)\r|\n"
+        re.Pattern = addStrBetweenEachChr(findwhat, " *") & "([a-z0-9\- ]*)\r|\n"
     End If
-    RE.IgnoreCase = True
-    RE.Global = True
+    re.IgnoreCase = True
+    re.Global = True
     For Each para In Doc.Paragraphs
-        If RE.test(para.Range.Text) Then
-            icount = icount + 1
+        If re.test(para.Range.Text) Then
+            iCount = iCount + 1
             
             Set rang = para.Range
         End If
     Next para
-    If icount <> 1 Then Debug.Print icount & Chr(34) & findwhat & Chr(34) & " found."
+    If iCount <> 1 Then Debug.Print iCount & Chr(34) & findwhat & Chr(34) & " found."
     Set RangeIncludingStr = rang
     Set rang = Nothing
 
@@ -122,13 +122,13 @@ End Function
 Function ExtractStringByPatternFrom(FindPattern As String, ByVal Text As String) As String
     Dim result As String
     Dim allMatches As Object
-    Dim RE As Object
-    Set RE = CreateObject("vbscript.regexp")
+    Dim re As Object
+    Set re = CreateObject("vbscript.regexp")
     
-        RE.Pattern = FindPattern
-        RE.Global = True
-        RE.IgnoreCase = True
-    Set allMatches = RE.Execute(Text)
+        re.Pattern = FindPattern
+        re.Global = True
+        re.IgnoreCase = True
+    Set allMatches = re.Execute(Text)
     
     If allMatches.Count <> 0 Then
     ' Debug.Print allMatches

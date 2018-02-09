@@ -82,11 +82,11 @@ Sub Button_Click(control As IRibbonControl)
 
         Case "SpBnReplace__btn"
             Call ReplacementWithRef
-            '            Call ReplacementWithoutMatchWildcards
+    
         Case "BtnReplacewithWildchar"
             Call ReplacementWithRef
         Case "BtnReplacewithoutWildchar"
-            '            Call ReplacementWithoutMatchWildcards
+           
 
         Case "SpBnDelete__btn"
             Call delSpace
