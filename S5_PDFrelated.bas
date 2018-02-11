@@ -6,7 +6,7 @@ Sub ExportAsPDFFile(Optional Doc As Document)
     If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
     With Doc
         .ExportAsFixedFormat OutputFileName:= _
-        .Path & Application.PathSeparator & .Name & ".pdf", _
+        .Path & Application.PathSeparator & .name & ".pdf", _
         ExportFormat:=wdExportFormatPDF, OpenAfterExport:=True, OptimizeFor:= _
         wdExportOptimizeForPrint, Range:=wdExportAllDocument, From:=1, To:=1, _
         Item:=wdExportDocumentContent, IncludeDocProps:=True, KeepIRM:=True, _
@@ -83,19 +83,18 @@ Function NewfileFromPDFWithFormat(ByVal PDFPath As String, ByVal FileExtension A
 
     'Initialize Acrobat by creating App object.
     Set objAcroApp = CreateObject("AcroExch.App")
-
+    Debug.Print Err.Description
     'Set AVDoc object.
     Set objAcroAVDoc = CreateObject("AcroExch.AVDoc")
-
+    Debug.Print Err.Description
     'Open the PDF file.
     boResult = objAcroAVDoc.Open(PDFPath, "")
-
+    Debug.Print Err.Description
     'Set the PDDoc object.
     Set objAcroPDDoc = objAcroAVDoc.GetPDDoc
-
+    Debug.Print Err.Description
     'Set the JS Object - Java Script Object.
     Set objJSO = objAcroPDDoc.GetJSObject
-
     Debug.Print Err.Description
     'Check if the format is correct and there are no errors.
     If ExportFormat <> "Wrong Input" And Err.Number = 0 Then
@@ -112,8 +111,8 @@ Function NewfileFromPDFWithFormat(ByVal PDFPath As String, ByVal FileExtension A
         vbNewLine & PDFPath
 
     End If
-    
-     'Close the PDF file without saving the changes.
+
+    'Close the PDF file without saving the changes.
     boResult = objAcroAVDoc.Close(True)
     'Close the Acrobat application.
     boResult = objAcroApp.Exit
@@ -125,6 +124,6 @@ Function NewfileFromPDFWithFormat(ByVal PDFPath As String, ByVal FileExtension A
 cleanExit:
     NewfileFromPDFWithFormat = NewFilePath
 
-   
+
 End Function
 

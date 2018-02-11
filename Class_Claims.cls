@@ -105,7 +105,7 @@ Private Sub StrToField(ByVal myfieldname As String, ByVal myfieldValue As String
 
 
     With ActiveDocument
-        .Variables.Add Name:=myfieldname, Value:=myfieldValue
+        .Variables.Add name:=myfieldname, Value:=myfieldValue
         iPostion = WordfindPositionInText(myfieldname)
         If iPostion = 0 Then
             Debug.Print "no such string found."

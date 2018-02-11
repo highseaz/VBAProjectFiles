@@ -184,7 +184,7 @@ Public Sub formatProject(vbaProject As VBProject)
     Dim component As Variant
     For Each component In vbaProject.VBComponents
         Set codePane = component.CodeModule
-        Debug.Print "Formatting " & component.Name
+        Debug.Print "Formatting " & component.name
         formatCode codePane
     Next
 End Sub
@@ -239,7 +239,7 @@ Public Sub formatCode(codePane As CodeModule)
     Next
     Exit Sub
 formatCodeError:
-    Debug.Print "Error while formatting " & codePane.Parent.Name
+    Debug.Print "Error while formatting " & codePane.Parent.name
     Debug.Print Err.Number & " " & Err.Description
     Debug.Print " on line " & lineNr & ": " & line
     Debug.Print "indentLevel: " & indentLevel & " , levelChange: " & levelChange

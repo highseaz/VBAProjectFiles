@@ -144,7 +144,7 @@ Sub Button_Click(control As IRibbonControl)
 End Sub
 
 'Callback for Glytemplate onAction
-Sub Gallery_Click(control As IRibbonControl, id As String, Index As Integer)
+Sub Gallery_Click(control As IRibbonControl, id As String, index As Integer)
 End Sub
 
 

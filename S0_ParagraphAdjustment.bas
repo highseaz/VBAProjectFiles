@@ -40,7 +40,7 @@ Sub LineSpacingAndFontAdjustment4EP()
             .WordWrap = True
             '        .Alignment = wdAlignParagraphJustify
         End With
-        .Font.Name = "Times New Roman"
+        .Font.name = "Times New Roman"
         .Font.Size = 12
     End With
 End Sub

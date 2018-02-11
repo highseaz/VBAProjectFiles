@@ -242,8 +242,8 @@ Public Sub PCTContentFormating(ByVal rng As Range, Optional ByVal Formatingtype 
             .AddSpaceBetweenFarEastAndDigit = True
             .BaseLineAlignment = wdBaselineAlignAuto
         End With
-        .Font.Name = "ËÎÌו"
-        .Font.Name = "Times New Roman"
+        .Font.name = "ËÎÌו"
+        .Font.name = "Times New Roman"
         If Formatingtype = 1 Then .Bold = True
         If Formatingtype = 3 Then .Bold = False
 

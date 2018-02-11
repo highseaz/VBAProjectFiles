@@ -77,21 +77,21 @@ End Sub
 
 Sub DeletePatternsInSelection(strPattern As String, posOffsetToStart As Integer, LenthofDeletion As Integer)
 
-    Dim myRange As Range
+    Dim MyRange As Range
     Dim NumofFound As Long
     Dim numofEnd As Long
 
     numofEnd = Selection.End
     NumofFound = 0
-    Set myRange = Selection.Range
-    With myRange.Find
+    Set MyRange = Selection.Range
+    With MyRange.Find
         .MatchWildcards = True
         .Execute FindText:=strPattern, Forward:=True
 
         While .Found And NumofFound < numofEnd
-            NumofFound = myRange.Start
+            NumofFound = MyRange.Start
             Debug.Print NumofFound
-            myRange.Find.Execute FindText:=strPattern, Forward:=True
+            MyRange.Find.Execute FindText:=strPattern, Forward:=True
             istart = NumofFound + posOffsetToStart
             ActiveDocument.Range(Start:=istart, End:=istart + Lenthofdel).Delete
         Wend

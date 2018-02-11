@@ -35,7 +35,7 @@ Private Sub App_DocumentBeforeClose(ByVal Doc As Document, Cancel As Boolean)
 
     End If
 
-    If Doc.Name Like "*customer*" Then
+    If Doc.name Like "*customer*" Then
         If MsgBox("ExportModules? ", vbYesNo + vbCritical + vbDefaultButton2, "ExportModules") = vbYes Then
 
             Call ExportModules

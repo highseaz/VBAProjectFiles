@@ -205,13 +205,13 @@ Sub ShowProcedureInfo2()
     For Each VBComp In ActiveDocument.VBProject.VBComponents
         If VBComp.Type <> vbext_ct_StdModule Then GoTo next_comp
 
-        CompName = VBComp.Name
+        CompName = VBComp.name
         If InStr(1, CompName, "_") < 1 Then GoTo next_comp
 
         Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
         rowNew.Cells.Merge
 
-        wdTable.Cell(rowNew.Index, 1).Range.InsertAfter CompName
+        wdTable.Cell(rowNew.index, 1).Range.InsertAfter CompName
 
         rowNew.Alignment = wdAlignRowCenter
         rowNew.Shading.BackgroundPatternColor = wdColorYellow
@@ -230,7 +230,7 @@ Sub ShowProcedureInfo2()
                 PInfo = ProcedureInfo(ProcName, ProcKind, CodeMod)
 
                 Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
-                wdTable.Cell(rowNew.Index, 1).Range.InsertAfter PInfo.ProcDeclaration
+                wdTable.Cell(rowNew.index, 1).Range.InsertAfter PInfo.ProcDeclaration
 
                 '                Debug.Print CompName
                 '                Debug.Print "ProcName: " & PInfo.ProcName

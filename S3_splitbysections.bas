@@ -5,7 +5,7 @@ Sub splitall()
 End Sub
 Sub splitBySections()
     Application.ScreenUpdating = False
-    Dim myRange As Range
+    Dim MyRange As Range
     Dim sourceDoc As Document
     Dim tarDoc As Document
     Dim spath As String
@@ -15,12 +15,12 @@ Sub splitBySections()
 
     Set sourceDoc = word.ActiveDocument
     spath = sourceDoc.Path
-    strBaseFilename = sourceDoc.Name
+    strBaseFilename = sourceDoc.name
 
     For i = 1 To sourceDoc.Sections.Count
-        Set myRange = sourceDoc.Sections(i).Range
-        istart = myRange.Start
-        iEnd = myRange.End - 1
+        Set MyRange = sourceDoc.Sections(i).Range
+        istart = MyRange.Start
+        iEnd = MyRange.End - 1
         sourceDoc.Range(istart, iEnd).Copy
 
         Set tarDoc = word.Documents.Add(Visible:=False, Template:=TEMPLATE_Null)
@@ -39,7 +39,7 @@ Sub splitBySections()
 
     Application.ScreenUpdating = True
 
-    Set myRange = Nothing
+    Set MyRange = Nothing
     Set tarDoc = Nothing
     Set sourceDoc = Nothing
 

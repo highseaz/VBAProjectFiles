@@ -23,7 +23,7 @@ Public Sub ExportModules()
     '    On Error GoTo 0
 
     ''' NOTE: This doc must be opened
-    szSourcedocument = ActiveDocument.Name
+    szSourcedocument = ActiveDocument.name
     Set wdSource = Application.Documents(szSourcedocument)
 
     If wdSource.VBProject.Protection = 1 Then
@@ -37,7 +37,7 @@ Public Sub ExportModules()
     For Each cmpComponent In wdSource.VBProject.VBComponents
 
         bExport = True
-        szFileName = cmpComponent.Name
+        szFileName = cmpComponent.name
 
         Select Case cmpComponent.Type
             Case vbext_ct_ClassModule
@@ -86,7 +86,7 @@ Public Sub ImportModules()
     End If
 
     ''' NOTE: This document must be open in Excel.
-    szTargetdocument = ActiveDocument.Name
+    szTargetdocument = ActiveDocument.name
     Set wdTarget = Application.Documents(szTargetdocument)
 
     If wdTarget.VBProject.Protection = 1 Then
@@ -112,11 +112,11 @@ Public Sub ImportModules()
     ''' Import all the code modules in the specified path
     ''' to the Activedocument.
     For Each objFile In objFSO.GetFolder(szImportPath).Files
-        If InStr(1, objFile.Name, "_") > 1 Then
+        If InStr(1, objFile.name, "_") > 1 Then
 
-            If (objFSO.GetExtensionName(objFile.Name) = "cls") Or _
-            (objFSO.GetExtensionName(objFile.Name) = "frm") Or _
-            (objFSO.GetExtensionName(objFile.Name) = "bas") Then
+            If (objFSO.GetExtensionName(objFile.name) = "cls") Or _
+            (objFSO.GetExtensionName(objFile.name) = "frm") Or _
+            (objFSO.GetExtensionName(objFile.name) = "bas") Then
                 cmpComponents.Import objFile.Path
             End If
         End If
@@ -163,10 +163,10 @@ Function DeleteVBAModulesAndUserForms()
     Set VBProj = ActiveDocument.VBProject
 
     For Each VBComp In VBProj.VBComponents
-        If VBComp.Type = vbext_ct_Document Or InStr(1, VBComp.Name, "VBA") > 1 Then
+        If VBComp.Type = vbext_ct_Document Or InStr(1, VBComp.name, "VBA") > 1 Then
             'Thisdocument or worksheet module
             'We do nothing
-        ElseIf InStr(1, VBComp.Name, "_") > 1 Then
+        ElseIf InStr(1, VBComp.name, "_") > 1 Then
             VBProj.VBComponents.Remove VBComp
         End If
     Next VBComp

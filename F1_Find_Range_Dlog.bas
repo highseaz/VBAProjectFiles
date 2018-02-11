@@ -42,8 +42,8 @@ Function addStrBetweenEachChr(r As String, theAddedStr) As String ''字符串中逐个
 End Function
 Function WordfindPositionInText(strPatternFindWhat As String) As Long
     '查找word所在位置
-    Set myRange = ActiveDocument.Content
-    With myRange.Find
+    Set MyRange = ActiveDocument.Content
+    With MyRange.Find
         .ClearFormatting
         .Replacement.ClearFormatting
 
@@ -59,7 +59,7 @@ Function WordfindPositionInText(strPatternFindWhat As String) As Long
         .MatchAllWordForms = False
         .Execute
         If .Found Then
-            WordfindPositionInText = myRange.Start
+            WordfindPositionInText = MyRange.Start
         Else
             WordfindPositionInText = 0
         End If

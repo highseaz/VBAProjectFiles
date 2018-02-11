@@ -263,7 +263,7 @@ Sub saveDocVarsFile()
     For Each oVar In ActiveDocument.Variables
 
         Dim outline As String
-        outline = oVar.Name & "=" & oVar.Value
+        outline = oVar.name & "=" & oVar.Value
         Print #iFileNum, outline
         vCount = vCount + 1
     Next oVar
@@ -330,7 +330,7 @@ Sub changeStrToField(myfieldValue As String)
     'Application.ActiveWindow.View.ShowFieldCodes = True
     '
     With ActiveDocument
-        .Variables.Add Name:=myfieldname ', Value:=myfieldValue
+        .Variables.Add name:=myfieldname ', Value:=myfieldValue
         iPostion = WordfindPositionInText(myfieldValue)
         If iPostion = 0 Then
             Debug.Print "no such string found."

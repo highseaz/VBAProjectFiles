@@ -6,7 +6,7 @@ Type typeReplacement
 End Type
 
 Type typeVarsWithNameValue
-    Name As String
+    name As String
     Value As String
 End Type
 
@@ -20,4 +20,11 @@ Type OAIssue
     IssueType As String
 End Type
 
+
+Type reftype
+    refIndex As Integer
+    refName As String
+    refNumber As String
+'    refNumberClean As String
+End Type
 
