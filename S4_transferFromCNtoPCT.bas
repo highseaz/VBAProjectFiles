@@ -98,7 +98,7 @@ Else:
 
     ''-ExtractStringByPatternFrom----------------
     ''-------------------------------------------------------------------
-    docNew.SaveAs Filename:=strNewFileName
+    docNew.SaveAs FileName:=strNewFileName
     docOri.Close SaveChanges:=wdDoNotSaveChanges
 
     Set docNew = Nothing

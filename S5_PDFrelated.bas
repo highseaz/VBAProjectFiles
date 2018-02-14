@@ -9,14 +9,14 @@ Sub ExportAsPDFFile(Optional Doc As Document)
         .Path & Application.PathSeparator & .name & ".pdf", _
         ExportFormat:=wdExportFormatPDF, OpenAfterExport:=True, OptimizeFor:= _
         wdExportOptimizeForPrint, Range:=wdExportAllDocument, From:=1, To:=1, _
-        Item:=wdExportDocumentContent, IncludeDocProps:=True, KeepIRM:=True, _
+        Item:=wdExportDocumentWithMarkup, IncludeDocProps:=True, KeepIRM:=True, _
         CreateBookmarks:=wdExportCreateNoBookmarks, DocStructureTags:=True, _
         BitmapMissingFonts:=True, UseISO19005_1:=False
     End With
 End Sub
 
 Function NewfileFromPDFWithFormat(ByVal PDFPath As String, ByVal FileExtension As String) As String
-
+PDFPath = LCase(PDFPath)
     'Check if the file exists.
     If Dir(PDFPath) = "" Then
         Debug.Print "File Path Error: Cannot find the PDF file!" & vbCrLf & "Check the PDF path and retry."

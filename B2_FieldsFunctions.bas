@@ -81,6 +81,8 @@ Sub unlinkSelectedFields()
     End If
 End Sub
 
+
+
 '读取txt文件中的DovVariable配置
 Sub loadDocVarsFile()
 
@@ -101,7 +103,7 @@ Sub loadDocVarsFile()
         Dim sName As String
         Dim sValue As String
 
-        sFileName = ActiveDocument.FullName & "-docvar.txt"
+        sFileName = infoFileFullPath
 
         If Len(Dir$(sFileName)) = 0 Then
             MsgBox "没有找到" & sFileName
@@ -203,7 +205,7 @@ Sub saveDocVarsFile()
     Dim sCode As String
     Dim sPos As Integer
 
-    sFileName = ActiveDocument.FullName & "-docvar.txt" '老文件名
+    sFileName = infoFileFullPath '老文件名
     sFileNameBackup = ActiveDocument.FullName & "-docvar-" & Format(Now(), "yyyyMMddhhmmss") & ".txt" '备份文件名
 
     '备份原有docvar文件
@@ -302,7 +304,7 @@ Private Function updateAllDocVarField() As Integer
 End Function
 
 '获取DovVariable Field的name
-Function getFieldName(ofld As Field) As String
+Function getFieldName(ByVal ofld As Field) As String
     '    Debug.Print oFld.code
     If ofld.Type = wdFieldDocVariable Then
         Dim docKey As String
@@ -314,7 +316,7 @@ Function getFieldName(ofld As Field) As String
 End Function
 
 '获取DovVariable Field的Result（显示结果）
-Function getFieldValue(ofld As Field) As String
+Function getFieldValue(ByVal ofld As Field) As String
     getFieldValue = Trim(ofld.result)
 End Function
 

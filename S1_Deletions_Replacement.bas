@@ -1,5 +1,5 @@
 Attribute VB_Name = "S1_Deletions_Replacement"
-Sub DelBlankPara(Optional Doc As Document)
+Sub DelBlankPara(Optional ByRef Doc As Document)
 
     If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
     Application.ScreenUpdating = False
@@ -153,3 +153,25 @@ Function StrReplaceSpecialChars(ByVal str As String, sChr As String, Optional sL
     StrReplaceSpecialChars = Left(s, sLen)
 
 End Function
+Sub applyListFormat(ByVal rngRange As Range)
+
+ With ListGalleries(wdNumberGallery).ListTemplates(1).ListLevels(1)
+        .NumberFormat = "[%1]"
+        .TrailingCharacter = wdTrailingTab
+        .NumberStyle = wdListNumberStyleSimpChinNum4
+        .NumberPosition = CentimetersToPoints(0)
+        .Alignment = wdListLevelAlignLeft
+        .TextPosition = CentimetersToPoints(1.26)
+        .TabPosition = 0
+        .ResetOnHigher = 0
+        .StartAt = 1
+        .LinkedStyle = ""
+    End With
+    ListGalleries(wdNumberGallery).ListTemplates(1).name = ""
+    rngRange.ListFormat.ApplyListTemplateWithLevel ListTemplate:= _
+        ListGalleries(wdNumberGallery).ListTemplates(1), ContinuePreviousList:= _
+        False, ApplyTo:=wdListApplyToWholeList, DefaultListBehavior:= _
+        wdWord10ListBehavior
+
+End Sub
+

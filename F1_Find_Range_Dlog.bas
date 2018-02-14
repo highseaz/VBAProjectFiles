@@ -20,11 +20,14 @@ Function RangeIncludingStr(ByVal findwhat As String, ByVal Doc As Document, Opti
     re.IgnoreCase = True
     re.Global = True
     For Each para In Doc.Paragraphs
-        If re.test(para.Range.Text) Then
+
+
+        If re.Test(para.Range.Text) Then
             iCount = iCount + 1
-            
+
             Set rang = para.Range
         End If
+
     Next para
     If iCount <> 1 Then Debug.Print iCount & Chr(34) & findwhat & Chr(34) & " found."
     Set RangeIncludingStr = rang
@@ -70,12 +73,12 @@ Public Function strStartWithEn(ByVal FindPattern As String, ByVal FindStr As Str
     With CreateObject("vbscript.regexp")
         .Global = True
         .Pattern = FindPattern
-        strStartWithEn = .test(FindStr)
+        strStartWithEn = .Test(FindStr)
     End With
 End Function
 
 Public Function getStrFromSelection() As String
-'获取选择中的字符串去除回车和两端空格
+    '获取选择中的字符串去除回车和两端空格
     Dim s1 As String
     s1 = Selection
     If s1 = "" Or s1 = Chr(13) Or s1 = Chr(10) Then Exit Function
@@ -84,7 +87,7 @@ Public Function getStrFromSelection() As String
     getStrFromSelection = Trim(s1)
 End Function
 Public Function ExistEnterStr(ByVal str_src As String) As Boolean
-'判断是否具有回车
+    '判断是否具有回车
     If VBA.InStr(1, str_src, Chr(10), vbTextCompare) > 0 Or VBA.InStr(1, str_src, Chr(13), vbTextCompare) > 0 Then
         ExistEnterStr = True
     Else
@@ -112,8 +115,9 @@ Public Function SelectedFileWithDlog() As String
         '设置两个文件过滤器
         If .Show = -1 Then
             'FileDialog 对象的 Show 方法显示对话框，并且返回 -1（如果您按 OK）和 0（如果您按 Cancel）。
-            MsgBox "您选择的文件是：" & .SelectedItems(1), vbOKOnly + vbInformation, "hi"
-              SelectedFileWithDlog = .SelectedItems(1)
+            '            MsgBox "您选择的文件是：" & .SelectedItems(1), vbOKOnly + vbInformation, "hi"
+            Debug.Print "您选择的文件是：" & .SelectedItems(1)
+            SelectedFileWithDlog = .SelectedItems(1)
         End If
     End With
 End Function
@@ -124,20 +128,20 @@ Function ExtractStringByPatternFrom(FindPattern As String, ByVal Text As String)
     Dim allMatches As Object
     Dim re As Object
     Set re = CreateObject("vbscript.regexp")
-    
-        re.Pattern = FindPattern
-        re.Global = True
-        re.IgnoreCase = True
+
+    re.Pattern = FindPattern
+    re.Global = True
+    re.IgnoreCase = True
     Set allMatches = re.Execute(Text)
-    
+
     If allMatches.Count <> 0 Then
-    ' Debug.Print allMatches
+        ' Debug.Print allMatches
         result = allMatches.Item(0)
     Else
-    result = ""
-    Debug.Print "ExtractString By Pattern From text failed!"
+        result = ""
+        Debug.Print "ExtractString By Pattern From text failed!"
     End If
-    
+
     ExtractStringByPatternFrom = result
 
 End Function

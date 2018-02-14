@@ -14,12 +14,9 @@ Private sText As String
 Private Sub Class_Initialize()
 
     Set objRegExp = CreateObject("VBScript.RegExp")
-      objRegExp.Global = True
+    objRegExp.Global = True
     objRegExp.IgnoreCase = True
-
-
 End Sub
-
 
 Function PStest(ByVal strPattern As String, _
                             ByVal searchTextString As String, _
@@ -32,7 +29,7 @@ Function PStest(ByVal strPattern As String, _
     sText = searchTextString
 
     objRegExp.Pattern = sPattern
-    PStest = objRegExp.test(sText)
+    PStest = objRegExp.Test(sText)
 
 End Function
 
@@ -41,11 +38,10 @@ Function PSEXE() As Object
         Debug.Print "objRegExp is not initialized."
         Set PSEXE = Nothing
     Else
-
         Set PSEXE = objRegExp.Execute(sText)
     End If
-
-
 End Function
 
-
+Private Sub Class_Terminate()
+    Set objRegExp = Nothing
+End Sub

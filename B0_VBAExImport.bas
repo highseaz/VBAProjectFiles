@@ -128,33 +128,11 @@ End Sub
 
 Function FolderWithVBAProjectFiles() As String
     '    Dim WshShell As Object
-    Dim FSO As Object
-    Dim SpecialPath As String
-
-    '    Set WshShell = CreateObject("WScript.Shell")
-    Set FSO = CreateObject("scripting.filesystemobject")
-
-    '    SpecialPath = WshShell.SpecialFolders("MyDocuments")
-    SpecialPath = MYWORKPATH_CODE
-    
-
-    If Right(SpecialPath, 1) <> "\" Then
-        SpecialPath = SpecialPath & "\"
-    End If
-
-    If FSO.FolderExists(SpecialPath & "VBAProjectFiles") = False Then
-        On Error Resume Next
-        MkDir SpecialPath & "VBAProjectFiles"
-        On Error GoTo 0
-    End If
-
-    If FSO.FolderExists(SpecialPath & "VBAProjectFiles") = True Then
-        FolderWithVBAProjectFiles = SpecialPath & "VBAProjectFiles"
-    Else
-        FolderWithVBAProjectFiles = "Error"
-    End If
-
+  FolderWithVBAProjectFiles = FolderFoundOrCreated(MYWORKPATH_CODE, "VBAProjectFiles")
 End Function
+
+
+
 
 Function DeleteVBAModulesAndUserForms()
     Dim VBProj As VBIDE.VBProject

@@ -34,7 +34,7 @@ Sub splitBySections()
         tarDoc.SaveAs2 tarDocFullName
         tarDoc.Close
 
-        Application.PrintOut Filename:=Chr(34) & tarDocFullName & Chr(34), Background:=True
+        Application.PrintOut FileName:=Chr(34) & tarDocFullName & Chr(34), Background:=True
     Next
 
     Application.ScreenUpdating = True

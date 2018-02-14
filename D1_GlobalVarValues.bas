@@ -55,6 +55,11 @@ Function MYWORKPATH() As String
     MYWORKPATH = ThisDocument.Path
 End Function
 
+Function MYWORKPATH_Work() As String
+    '    MYWORKPATH = JsonReadFromConfFile("WORKPATH")
+    MYWORKPATH_Work = ThisDocument.Path & "\working"
+End Function
+
 Function MYWORKPATH_CODE() As String
     MYWORKPATH_CODE = ThisDocument.Path & "\code"
 End Function

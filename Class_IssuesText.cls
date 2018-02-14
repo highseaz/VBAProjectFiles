@@ -56,13 +56,13 @@ End Sub
 
 Private Sub transformFromENtoCN()
     Dim claimIndexPatternInIssue As String
-    claimIndexPatternInIssue = "(?:claim[s ]*)((\d+)[\d-, \w]*)(?=(is)|(are))"
+    claimIndexPatternInIssue = "(?:claim[s\s]*)(\d+[\d-, \w]*?)(?=(is)|(are)|(would))"
 
     Dim reobj As New Class_VBScriptRegExp
     Dim re, allMatches, temjs
     Set re = reobj.objRegExp
     re.Pattern = claimIndexPatternInIssue
-    If re.test(strENText) Then
+    If re.Test(strENText) Then
 
         Set allMatches = re.Execute(strENText)
         strCNText = allMatches(0).submatches(0)
@@ -77,8 +77,6 @@ Private Sub transformFromENtoCN()
     End If
 
     strCNText = dic("CNAddBefore") & strCNText & dic("CNAddAfter")
-    
-    
   
 End Sub
 

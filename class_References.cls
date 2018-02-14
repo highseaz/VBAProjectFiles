@@ -12,7 +12,7 @@ Private refCollection() As reftype
 Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
 
 Public Property Get Count() As Integer
-    Count = refIndex + 1
+    Count = refIndex
 End Property
 Public Function refItem(ByVal i As Integer) As reftype
     refItem = refCollection(i)
@@ -43,11 +43,11 @@ Public Function Add(ByVal strName As String, ByVal strNumber As String) As Integ
         Exit Function
     End If
     
-    If SafeArrayGetDim(refCollection) = 0 Then
-        refIndex = 0
-    Else
-        refIndex = UBound(refCollection) + 1
-    End If
+'    If SafeArrayGetDim(refCollection) = 0 Then
+'        refIndex = 0
+'    Else
+'        refIndex = UBound(refCollection) + 1
+'    End If
     
     Dim ref As reftype
     ref.refIndex = refIndex + 1
@@ -56,8 +56,9 @@ Public Function Add(ByVal strName As String, ByVal strNumber As String) As Integ
 
     ReDim Preserve refCollection(0 To refIndex)
     refCollection(refIndex) = ref
-    Debug.Print "ref " & refIndex & "add: " & refCollection(refIndex).refName & refCollection(refIndex).refNumber
+        Debug.Print "ref " & refIndex & "add: " & refCollection(refIndex).refName & refCollection(refIndex).refNumber
     Add = refIndex
+    refIndex = refIndex + 1
 End Function
 Private Sub Class_Initialize()
     refIndex = 0
