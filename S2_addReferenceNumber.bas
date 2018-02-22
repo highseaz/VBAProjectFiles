@@ -1,6 +1,6 @@
 Attribute VB_Name = "S2_addReferenceNumber"
-Sub addReferenceNumber4str(str As String, num As String, Rangetobeamended As Range) '
-    str = Trim(str)
+Sub addReferenceNumber4str(Str As String, num As String, Rangetobeamended As Range) '
+    Str = Trim(Str)
     num = " (" & Trim(num) & ")"
 
     For Each fieldLoop In Rangetobeamended.Fields
@@ -12,11 +12,11 @@ Sub addReferenceNumber4str(str As String, num As String, Rangetobeamended As Ran
     Dim strFound As String
     Dim re As Object
     Set re = CreateObject("vbscript.regexp")
-    re.Pattern = "(" & str & "(s|es)?)([,.;]|\s(?!\())"
+    re.Pattern = "(" & Str & "(s|es)?)([,.;]|\s(?!\())"
     re.Global = True
     re.IgnoreCase = True
 
-    If re.Test(Rangetobeamended.Text) Then
+    If re.test(Rangetobeamended.Text) Then
         Set allMatches = re.Execute(Rangetobeamended.Text)
         For i = 0 To allMatches.Count - 1
             strFound = allMatches(i).submatches(0)
@@ -26,17 +26,17 @@ Sub addReferenceNumber4str(str As String, num As String, Rangetobeamended As Ran
             ActiveDocument.Range(Start:=istart, End:=iEnd).InsertAfter num
         Next
     Else
-        Debug.Print "no ¡®" & str & "¡¯is found."
+        Debug.Print "no ¡®" & Str & "¡¯is found."
     End If
 
 End Sub
 
 
-Sub addReferenceNumber4Claims(str As String, num As String) '
+Sub addReferenceNumber4Claims(Str As String, num As String) '
     Dim rang As Range
     Set rang = ActiveDocument.Range(Start:=RangeIncludingStr("WHAT IS CLAIMED IS", ActiveDocument, True).End, _
                                 End:=RangeIncludingStr("ABSTRACT", ActiveDocument, True).Start)
-    Call addReferenceNumber4str(str, num, rang)
+    Call addReferenceNumber4str(Str, num, rang)
     Set rang = Nothing
 
 

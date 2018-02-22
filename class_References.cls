@@ -17,12 +17,12 @@ End Property
 Public Function refItem(ByVal i As Integer) As reftype
     refItem = refCollection(i)
 End Function
-Public Function Exist(ByVal str As String) As Integer
-    str = Trim(LCase(str))
+Public Function Exist(ByVal Str As String) As Integer
+    Str = Trim(LCase(Str))
     Exist = -1
     If refIndex = 0 Then Exit Function
     For i = 0 To UBound(refCollection)
-        If LCase(refCollection(i).refName) = str Or LCase(refCollection(i).refNumber) = str Then
+        If LCase(refCollection(i).refName) = Str Or LCase(refCollection(i).refNumber) = Str Then
             Exist = i
             Exit Function
         End If
@@ -34,11 +34,11 @@ Public Function Add(ByVal strName As String, ByVal strNumber As String) As Integ
     strNumber = Trim(strNumber)
 
     If Exist(strName) <> -1 Then
-        Debug.Print "name exist: " & strName
+'        Debug.Print "name exist: " & strName
         Add = Exist(strName)
         Exit Function
     ElseIf Exist(strNumber) <> -1 Then
-        Debug.Print "No. exist: " & strNumber
+'        Debug.Print "No. exist: " & strNumber
         Add = Exist(strName)
         Exit Function
     End If
@@ -56,7 +56,7 @@ Public Function Add(ByVal strName As String, ByVal strNumber As String) As Integ
 
     ReDim Preserve refCollection(0 To refIndex)
     refCollection(refIndex) = ref
-        Debug.Print "ref " & refIndex & "add: " & refCollection(refIndex).refName & refCollection(refIndex).refNumber
+'        Debug.Print "ref " & refIndex & "add: " & refCollection(refIndex).refName & refCollection(refIndex).refNumber
     Add = refIndex
     refIndex = refIndex + 1
 End Function

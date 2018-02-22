@@ -29,7 +29,7 @@ Function PStest(ByVal strPattern As String, _
     sText = searchTextString
 
     objRegExp.Pattern = sPattern
-    PStest = objRegExp.Test(sText)
+    PStest = objRegExp.test(sText)
 
 End Function
 

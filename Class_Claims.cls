@@ -142,7 +142,7 @@ Private Sub FindClaimIndexRanges()
         ClaimRangeStartPosition = ClaimRange.Start
 
         re.Pattern = ClaimIndexPattern
-        If re.Test(ClaimRange.Text) Then
+        If re.test(ClaimRange.Text) Then
             Set allMatches = re.Execute(ClaimRange.Text)
             ClaimIndexFound = allMatches(0)
 
@@ -153,7 +153,7 @@ Private Sub FindClaimIndexRanges()
         End If
 
         re.Pattern = claimQuotePattern
-        If re.Test(ClaimRange.Text) Then
+        If re.test(ClaimRange.Text) Then
             Set amQuoteLong = re.Execute(ClaimRange.Text)
 
             For i = 0 To amQuoteLong.Count - 1
@@ -162,7 +162,7 @@ Private Sub FindClaimIndexRanges()
                 ClaimQuoteLongSPos = ClaimRangeStartPosition + amQuoteLong(i).FirstIndex
 
                 re.Pattern = ClaimIndexPattern
-                If re.Test(ClaimQuoteLong) Then
+                If re.test(ClaimQuoteLong) Then
                     Set amClaimIndex = re.Execute(ClaimQuoteLong)
 
                     For j = 0 To amClaimIndex.Count - 1

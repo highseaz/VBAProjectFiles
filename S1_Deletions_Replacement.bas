@@ -6,10 +6,10 @@ Sub DelBlankPara(Optional ByRef Doc As Document)
     For Each i In Doc.Paragraphs
         If Len(Trim(i.Range)) = 1 Then
             i.Range.Delete
-            n = n + 1
+            N = N + 1
         End If
     Next
-    Debug.Print "Delete " & n & " blank Paragraphs"
+    Debug.Print "Delete " & N & " blank Paragraphs"
     Application.ScreenUpdating = True
 End Sub
 
@@ -68,10 +68,10 @@ Sub delSpace(Optional Doc As Document)
 End Sub
 
 Sub DeleteUselessEnterinSelection()
-    Dim str As String
+    Dim Str As String
 
-    str = "([£»£º£¬»ò])^13([!Í¼])"
-    Call DeletePatternsInSelection(str, 1, 1)
+    Str = "([£»£º£¬»ò])^13([!Í¼])"
+    Call DeletePatternsInSelection(Str, 1, 1)
 
 End Sub
 
@@ -135,9 +135,9 @@ Sub ReplacementWithRef()
 End Sub
 
 
-Function StrReplaceSpecialChars(ByVal str As String, sChr As String, Optional sLen As Integer = 20)
+Function StrReplaceSpecialChars(ByVal Str As String, sChr As String, Optional sLen As Integer = 20)
     Dim s As String
-    s = Replace(str, "'", sChr)
+    s = Replace(Str, "'", sChr)
     s = Replace(s, "*", sChr)
     s = Replace(s, "/", sChr)
     s = Replace(s, "\", sChr)

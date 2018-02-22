@@ -62,7 +62,7 @@ Private Sub transformFromENtoCN()
     Dim re, allMatches, temjs
     Set re = reobj.objRegExp
     re.Pattern = claimIndexPatternInIssue
-    If re.Test(strENText) Then
+    If re.test(strENText) Then
 
         Set allMatches = re.Execute(strENText)
         strCNText = allMatches(0).submatches(0)

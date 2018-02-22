@@ -7,14 +7,11 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'Option Explicit
 
 Private IssuesCount As Integer
 Private IssuesTextSet() As Class_IssuesText
 Private jsDic As Object
-
 Private myDocPath As String
-
 Private allRefs As New class_References
 
 Public Property Get Count() As Integer
@@ -42,13 +39,14 @@ Public Property Let DocPath(ByVal DocumentFullPath As String)
         Debug.Print "Error: myDocPath is null."
         Exit Property
     End If
-    '    Debug.Print myDocPath
+
     Application.ScreenUpdating = False
     Set myDocument = Documents.Open(FileName:=myDocPath, Visible:=False)
     CleanDocFile myDocument
     InitializeInfo myDocument
     myDocument.Close SaveChanges:=wdDoNotSaveChanges
     Application.ScreenUpdating = True
+
 End Property
 Function Allreferences() As class_References
     Set Allreferences = allRefs
@@ -59,44 +57,49 @@ End Function
 
 
 Private Sub InitializeInfo(myDocument As Document)
+
     Dim rngStart As Range
     Dim rngEnd As Range
-    Set rngStart = RangeIncludingStr("detailed action", myDocument)
-    Set rngEnd = RangeIncludingStr("conclusion", myDocument)
-
-    Dim re As Object
-    Dim i As Integer
+    Dim reobj As New Class_VBScriptRegExp
     Dim para As Paragraph
     IssuesCount = 0
 
-    Set re = CreateObject("VBScript.RegExp")
-    re.IgnoreCase = True
-    re.Global = True
-    For Each para In myDocument.Paragraphs
-        If para.Range.Start + 1 > rngStart.End And para.Range.End - 1 < rngEnd.Start Then
-            For i = 1 To jsDic.Count
+    Set rngStart = RangeIncludingStr("detailed action", myDocument)
+    Set rngEnd = RangeIncludingStr("conclusion", myDocument)
+    paraStart = myDocument.Range(0, rngStart.End).Paragraphs.Count
+    paraEnd = myDocument.Range(0, rngEnd.End).Paragraphs.Count
 
-                re.Pattern = jsDic(i)("IssuePattern") '
+    Dim pb As ProgressBar
+    Set pb = New ProgressBar
+    pb.Initialize "running", paraEnd - paraStart - 1
 
-                If re.Test(para.Range.Text) Then
+    For paraindex = paraStart To paraEnd
+        Set para = myDocument.Paragraphs(paraindex)
+        For i = 1 To jsDic.Count
 
-                    ReDim Preserve IssuesTextSet(0 To IssuesCount)
+            If reobj.PStest(jsDic(i)("IssuePattern"), para.Range.Text) Then
+                ReDim Preserve IssuesTextSet(0 To IssuesCount)
 
-                    Dim newIssuesText As New Class_IssuesText
+                Dim newIssuesText As New Class_IssuesText
 
-                    refinof = FindRefInIssuesText(jsDic(i)("refParaPattern"), para.Range.Text)
+                refinof = FindRefInIssuesText(jsDic(i)("refParaPattern"), para.Range.Text)
 
-                    newIssuesText.clsInitialize i, para.Range.Text, refinof
-                    Set IssuesTextSet(IssuesCount) = newIssuesText
-                    IssuesCount = IssuesCount + 1
-                    Set newIssuesText = Nothing
-                End If
-            Next i
-        End If
-    Next para
+                newIssuesText.clsInitialize i, para.Range.Text, refinof
+                Set IssuesTextSet(IssuesCount) = newIssuesText
+                IssuesCount = IssuesCount + 1
+                Set newIssuesText = Nothing
+                Exit For
+            End If
+        Next i
+        pb.AddProgress 1
+
+    Next
+    Unload pb
+
     Set para = Nothing
     Set rngStart = Nothing
     Set rngEnd = Nothing
+
 End Sub
 
 Private Sub Class_Initialize()
@@ -105,11 +108,11 @@ Private Sub Class_Initialize()
 
 End Sub
 Function ENSummary() As String
-    Dim str As String
+    Dim Str As String
     For i = 0 To Count - 1
-        str = str & IssuesTexts(i).ENText & vbNewLine
+        Str = Str & IssuesTexts(i).ENText & vbNewLine
     Next
-    ENSummary = str
+    ENSummary = Str
 
 End Function
 Sub InsertCNsummary(Optional ByVal rngRange As Range)
@@ -125,32 +128,45 @@ Sub InsertCNsummary(Optional ByVal rngRange As Range)
 
 End Sub
 Function CNSummary() As String
-    Dim str As String
+    Dim Str As String
 
     For i = 0 To Count - 1
-        str = str & IssuesTexts(i).CNText & vbNewLine
+        Str = Str & IssuesTexts(i).CNText & vbNewLine
     Next
 
     For j = 1 To allRefs.Count
 
         Dim reobj As New Class_VBScriptRegExp
-        If reobj.PStest("D" & j, str, True, False) Then
-            str = reobj.objRegExp.Replace(str, "D" & j & _
+        If reobj.PStest("D" & j, Str, True, False) Then
+            If ReferenceItem(j - 1).refNumber <> vbNullString Then
+                refNum = ReferenceItem(j - 1).refNumber
+                priorityDate = getDictPatentInfobyPatNum(cleanPatentNum(refNum)).Item("priorityDate")
+                var = Split(priorityDate, "-")
+                priorityDateCN = var(0) & "年" & var(1) & "月" & var(2) & "日"
+                Str = reobj.objRegExp.Replace(Str, "D" & j & _
                                                  "(" & ReferenceItem(j - 1).refName & _
-                                                 "-" & ReferenceItem(j - 1).refNumber & _
+                                                 "，" & refNum & _
+                                                 "，其最早优先权日为 " & priorityDateCN & _
                                                  ")")
+            Else
+            
+            End If
         End If
+
+        ''
+        '        Debug.Print patentinfodic
     Next
-    CNSummary = str
+    CNSummary = Str
 End Function
 
 Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searchTextString As String)
+
     If refParaPattern = vbNullString Then
         FindRefInIssuesText = vbNullString
         Exit Function
     End If
 
-    Dim str As String
+    Dim Str As String
 
     Dim reobj As New Class_VBScriptRegExp
 
@@ -159,7 +175,7 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
         Set refParaallMatches = reobj.PSEXE
 
         refstr = Split(refParaallMatches(0), "view of")
-        refdocCount = UBound(refstr) + 1  '''count
+        refdocCount = UBound(refstr) + 1
 
         For j = 1 To refdocCount
             singleRefString = refstr(j - 1)
@@ -169,7 +185,6 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
             If reobj.PStest(refNoPattern, singleRefString) Then
                 Set singleRefallMatches = reobj.PSEXE
                 singleRefNo = singleRefallMatches(0).submatches(0) & singleRefallMatches(0).submatches(1)
-                '                Debug.Print "-D" & j & ":_" & singleRefNo
             End If
 
             refNamePattern1 = "(?:hereinafter)\s([A-Z]\w*)"
@@ -178,31 +193,30 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
 
             If reobj.PStest(refNamePattern1, singleRefString) Then
                 Set singleRefallMatches = reobj.PSEXE
-                singleRefName = singleRefallMatches(0).submatches(0) '& singleRefallMatches(0).submatches(1)
+                singleRefName = singleRefallMatches(0).submatches(0)
             ElseIf reobj.PStest(refNamePattern2, singleRefString, True) Then
                 Set singleRefallMatches = reobj.PSEXE
-                singleRefName = singleRefallMatches(0) '.submatches(0) & singleRefallMatches(0).submatches(1)
+                singleRefName = singleRefallMatches(0)
             ElseIf reobj.PStest(refNamePattern3, singleRefString, True) Then
                 Set singleRefallMatches = reobj.PSEXE
                 singleRefName = singleRefallMatches(0)
             End If
 
             addrefIndex = allRefs.Add(singleRefName, singleRefNo)
-            str = str & "D" & addrefIndex + 1 & "、"
+            Str = Str & "D" & addrefIndex + 1 & "、"
         Next
     End If
     Set reobj = Nothing
-    FindRefInIssuesText = Left(str, Len(str) - 1)
+    FindRefInIssuesText = Left(Str, Len(Str) - 1)
+
 End Function
 Sub CleanDocFile(ByRef Doc As Document)
-
-    DelBlankPara Doc
 
     With Doc.Range
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting
         With .Find
-            .Text = "([a-zA-Z0-9 ])^13([a-z0-9 ])"
+            .Text = "([a-zA-Z0-9 ])[^m^13]{1,}([a-z0-9 ])"
             .Replacement.Text = "\1 \2"
             .Forward = True
             .Wrap = wdFindContinue

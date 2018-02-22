@@ -22,7 +22,7 @@ Function RangeIncludingStr(ByVal findwhat As String, ByVal Doc As Document, Opti
     For Each para In Doc.Paragraphs
 
 
-        If re.Test(para.Range.Text) Then
+        If re.test(para.Range.Text) Then
             iCount = iCount + 1
 
             Set rang = para.Range
@@ -73,7 +73,7 @@ Public Function strStartWithEn(ByVal FindPattern As String, ByVal FindStr As Str
     With CreateObject("vbscript.regexp")
         .Global = True
         .Pattern = FindPattern
-        strStartWithEn = .Test(FindStr)
+        strStartWithEn = .test(FindStr)
     End With
 End Function
 

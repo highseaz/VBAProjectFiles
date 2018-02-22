@@ -115,17 +115,17 @@ Sub ShowProcedureInfo()
     Dim VBProj As VBIDE.VBProject
     Dim VBComp As VBIDE.VBComponent
     Dim CodeMod As VBIDE.CodeModule
-    Dim CompName As String
+    Dim compName As String
     Dim ProcName As String
     Dim ProcKind As VBIDE.vbext_ProcKind
     Dim PInfo As ProcInfo
 
-    CompName = "B0_VBAExImport"
+    compName = "B0_VBAExImport"
     ProcName = "ImportModules"
     ProcKind = vbext_pk_Proc
 
     Set VBProj = ActiveDocument.VBProject
-    Set VBComp = VBProj.VBComponents(CompName)
+    Set VBComp = VBProj.VBComponents(compName)
     Set CodeMod = VBComp.CodeModule
 
     PInfo = ProcedureInfo(ProcName, ProcKind, CodeMod)
@@ -191,7 +191,7 @@ Sub ShowProcedureInfo2()
     Dim VBProj As VBIDE.VBProject
     Dim VBComp As VBIDE.VBComponent
     Dim CodeMod As VBIDE.CodeModule
-    Dim CompName As String
+    Dim compName As String
     Dim ProcName As String
     Dim ProcKind As VBIDE.vbext_ProcKind
     Dim PInfo As ProcInfo
@@ -205,13 +205,13 @@ Sub ShowProcedureInfo2()
     For Each VBComp In ActiveDocument.VBProject.VBComponents
         If VBComp.Type <> vbext_ct_StdModule Then GoTo next_comp
 
-        CompName = VBComp.name
-        If InStr(1, CompName, "_") < 1 Then GoTo next_comp
+        compName = VBComp.name
+        If InStr(1, compName, "_") < 1 Then GoTo next_comp
 
         Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
         rowNew.Cells.Merge
 
-        wdTable.Cell(rowNew.index, 1).Range.InsertAfter CompName
+        wdTable.Cell(rowNew.index, 1).Range.InsertAfter compName
 
         rowNew.Alignment = wdAlignRowCenter
         rowNew.Shading.BackgroundPatternColor = wdColorYellow
@@ -244,5 +244,57 @@ next_comp:
     Next
 
     ProcKind = vbext_pk_Proc
+
+End Sub
+Sub clearCommentInVBComponents(ByVal compName As String)
+
+    Dim N                       As Long
+    Dim i                        As Long
+    Dim j                        As Long
+    Dim k                       As Long
+    Dim l                        As Long
+    Dim LineText            As String
+    Dim ExitString          As String
+    Dim Quotes              As Long
+    Dim Q                       As Long
+    Dim StartPos            As Long
+
+
+    With ThisDocument.VBProject.VBComponents("Class_OAIssue").CodeModule
+        For j = .CountOfLines To 1 Step -1
+            LineText = Trim(.Lines(j, 1))
+            If LineText = "ExitString = " & """" & "Ignore Comments In This Module" & """" Then
+                Exit For
+            End If
+            StartPos = 1
+Retry:
+            N = InStr(StartPos, LineText, "'")
+            Q = InStr(StartPos, LineText, """")
+            Quotes = 0
+            If Q < N Then
+                For l = 1 To N
+                    If Mid(LineText, l, 1) = """" Then
+                        Quotes = Quotes + 1
+                    End If
+                Next l
+            End If
+            If Quotes / 2 = 1 Then
+                StartPos = N + 1
+GoTo Retry:
+            Else
+                Select Case N
+                    Case Is = 0
+                    Case Is = 1
+                        .DeleteLines j, 1
+                    Case Is > 1
+                        .ReplaceLine j, Left(LineText, N - 1)
+                        Debug.Print "line " & j & ": <" & LineText & "> Is amended."
+                End Select
+            End If
+        Next j
+    End With
+
+
+    ExitString = "Ignore Comments In This Module"
 
 End Sub

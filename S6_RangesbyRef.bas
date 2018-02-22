@@ -1,7 +1,7 @@
 Attribute VB_Name = "S6_RangesbyRef"
 Private Declare Function SafeArrayGetDim Lib "oleaut32.dll" (ByRef saArray() As Any) As Long
 
-Sub reDimRanges(ByRef theRanges() As Range, ByVal startPos As Long, ByVal endPos As Long)
+Sub reDimRanges(ByRef theRanges() As Range, ByVal StartPos As Long, ByVal endPos As Long)
     If SafeArrayGetDim(theRanges) = 0 Then
         index = 0
     Else
@@ -9,7 +9,7 @@ Sub reDimRanges(ByRef theRanges() As Range, ByVal startPos As Long, ByVal endPos
     End If
 
     ReDim Preserve theRanges(0 To index)
-    Set theRanges(index) = ActiveDocument.Range(startPos, endPos)
+    Set theRanges(index) = ActiveDocument.Range(StartPos, endPos)
     '    Debug.Print "Index: " & Index
     '    Debug.Print "Range Text: " & theRanges(Index).Text
 End Sub

@@ -952,7 +952,7 @@ Private Function IsArrayAllocated(Arr As Variant) As Boolean
 ' been sized with Redim, or a dynamic array that has been Erased).
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Dim n As Long
+Dim N As Long
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 ' If Arr is not an array, return FALSE and get out.
@@ -967,7 +967,7 @@ End If
 ' an error will occur. Test Err.Number to see if an error occured.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 On Error Resume Next
-n = UBound(Arr, 1)
+N = UBound(Arr, 1)
 If Err.Number = 0 Then
     '''''''''''''''''''''''''''''''''''''
     ' No error. Array has been allocated.
