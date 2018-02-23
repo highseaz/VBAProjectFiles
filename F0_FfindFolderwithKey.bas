@@ -20,13 +20,14 @@ End Function
 
 Function infoFileFullPath() As String
 
-    If Not DocVarExists("CaseID") Then
-     UserFormBaseInfo.Show
-         
-    End If
-
-  infoFileFullPath = findFolderwithKey(ActiveDocument.Variables("CaseID").Value) & "\info.txt"
-
+    If Not DocVarExists("CaseID_self") Then
+'     UserFormBaseInfo.Show
+          newID = Trim(InputBox("CaseID_self", " ‰»Î–¬ƒ⁄»›"))
+           infoFileFullPath = findFolderwithKey(newID) & "\info.txt"
+ 
+Else
+  infoFileFullPath = findFolderwithKey(ActiveDocument.Variables("CaseID_self").Value) & "\info.txt"
+   End If
 
 End Function
 

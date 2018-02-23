@@ -120,10 +120,12 @@ Sub InsertCNsummary(Optional ByVal rngRange As Range)
     If rngRange Is Nothing Then
         Set rngRange = Selection.Range
     End If
-    newStart = rngRange.End + 1
+    newStart = rngRange.Start
+    rngRange.Text = ""
     rngRange.InsertAfter CNSummary
 
-    newEnd = newStart + Len(CNSummary) - 1
+    newEnd = newStart + Len(CNSummary) - IssuesCount
+
     applyListFormat ActiveDocument.Range(newStart, newEnd)
 
 End Sub
