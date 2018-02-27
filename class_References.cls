@@ -17,12 +17,12 @@ End Property
 Public Function refItem(ByVal i As Integer) As reftype
     refItem = refCollection(i)
 End Function
-Public Function Exist(ByVal Str As String) As Integer
-    Str = Trim(LCase(Str))
+Public Function Exist(ByVal str As String) As Integer
+    str = Trim(LCase(str))
     Exist = -1
     If refIndex = 0 Then Exit Function
     For i = 0 To UBound(refCollection)
-        If LCase(refCollection(i).refName) = Str Or LCase(refCollection(i).refNumber) = Str Then
+        If LCase(refCollection(i).refName) = str Or LCase(refCollection(i).refNumber) = str Then
             Exist = i
             Exit Function
         End If

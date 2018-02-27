@@ -28,3 +28,15 @@ Type reftype
 '    refNumberClean As String
 End Type
 
+Public Type claimInfo
+    cNo As Integer
+    cDependentFrom As Integer
+    cKind As claimKind
+    cSubjectMatter As String
+End Type
+
+Enum claimKind
+    claimKind_IND = 1
+    claimKind_FAKEIND = 2
+    claimKind_DPD = 4
+End Enum

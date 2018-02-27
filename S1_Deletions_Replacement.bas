@@ -1,9 +1,9 @@
 Attribute VB_Name = "S1_Deletions_Replacement"
-Sub DelBlankPara(Optional ByRef Doc As Document)
+Sub DelBlankPara(Optional ByRef doc As Document)
 
-    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
+    If doc Is Nothing Or IsMissing(doc) Then Set doc = ActiveDocument
     Application.ScreenUpdating = False
-    For Each i In Doc.Paragraphs
+    For Each i In doc.Paragraphs
         If Len(Trim(i.Range)) = 1 Then
             i.Range.Delete
             N = N + 1
@@ -34,11 +34,11 @@ Sub delContentinMidbracket(Optional rng As Range)
     End With
 End Sub
 
-Sub delSpace(Optional Doc As Document)
+Sub delSpace(Optional doc As Document)
 
-    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
+    If doc Is Nothing Or IsMissing(doc) Then Set doc = ActiveDocument
 
-    With Doc
+    With doc
         trackflag = .TrackRevisions
 
         .TrackRevisions = False
@@ -68,10 +68,10 @@ Sub delSpace(Optional Doc As Document)
 End Sub
 
 Sub DeleteUselessEnterinSelection()
-    Dim Str As String
+    Dim str As String
 
-    Str = "([£»£º£¬»ò])^13([!Í¼])"
-    Call DeletePatternsInSelection(Str, 1, 1)
+    str = "([£»£º£¬»ò])^13([!Í¼])"
+    Call DeletePatternsInSelection(str, 1, 1)
 
 End Sub
 
@@ -135,9 +135,9 @@ Sub ReplacementWithRef()
 End Sub
 
 
-Function StrReplaceSpecialChars(ByVal Str As String, sChr As String, Optional sLen As Integer = 20)
+Function StrReplaceSpecialChars(ByVal str As String, sChr As String, Optional sLen As Integer = 20)
     Dim s As String
-    s = Replace(Str, "'", sChr)
+    s = Replace(str, "'", sChr)
     s = Replace(s, "*", sChr)
     s = Replace(s, "/", sChr)
     s = Replace(s, "\", sChr)

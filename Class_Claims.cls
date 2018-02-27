@@ -8,44 +8,58 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 
+
 Private ClaimIndexPattern As String
 Private ClaimsCount As Integer
+Private GroupNo As Integer
 Private ClaimIndexRangesArray() As Range
-Private ClaimRangesArray() As Range
+Private ClaimRangesArray() 'As Range
 Private workRange As Range
 Private delimiter As String
 Private claimQuotePattern As String
+Private myDocument As Document
+
+Private claimInfoSummary As String
+
+Private claimInforTable() As claimInfo
 
 Private pLanguage As Languagetype
 
 Enum Languagetype
-    CN
-    EN
+    lng_CN
+    lng_EN
 End Enum
+Private Sub Class_Initialize()
+    ClaimIndexPattern = "\d+(?=\D)"
+    pLanguage = lng_CN
+    '    ClassInit
+End Sub
 
+'Property Let Language(ByVal lng As Languagetype)
+'    pLanguage = pLanguage
+'    ClassInit
+'End Property
 
-Property Let clsInitialize(ByVal lng As Languagetype)
-    pLanguage = lng
-    ClassInit
-End Property
+'Property Set DocumentFile(ByVal doc As Document)
+'    Set myDocument = doc
+'    ClassInit
+'End Property
 
 Public Property Get Count() As Integer
     Count = ClaimsCount
 End Property
 
-Function getClaimIndexRanges()
+Public Function getClaimIndexRanges()
     getClaimIndexRanges = ClaimIndexRangesArray
 End Function
-Private Sub Class_Initialize()
-    ClaimIndexPattern = "\d+(?=\D)"
-End Sub
 
-Private Sub ClassInit()
+
+Public Sub ClassInit(Optional ByVal doc As Document, Optional ByVal lng As Languagetype = lng_CN)
 
     Dim js As Object
-    If pLanguage = CN Then
+    If pLanguage = lng_CN Then
         Set js = JsonReadFromConfFile("ClaimsPattern")("CN")
-    ElseIf pLanguage = EN Then
+    ElseIf pLanguage = lng_EN Then
         Set js = JsonReadFromConfFile("ClaimsPattern")("EN")
     Else
         Exit Sub
@@ -55,16 +69,39 @@ Private Sub ClassInit()
     delimiter = js("delimiter")
     claimQuotePattern = js("claimQuotePattern")
 
-    Set workRange = RangeIncludingStr(workRngPattern, ActiveDocument)
+    Application.ScreenUpdating = False
+    ''---___________________
+    If IsMissing(doc) Then
+        Dim docPath As String
+        docPath = SelectedFileWithDlog
+        If docPath = "" Then
+            MsgBox "no doc is inputted"
+            Exit Sub
+        End If
+        Set myDocument = Documents.Open(FileName:=docPath, Visible:=False)
+    Else
+        Set myDocument = doc
+
+    End If
+    ''---
+
+    myDocument.Revisions.AcceptAll
+
+    Set workRange = RangeIncludingStr(workRngPattern, myDocument)
     workRange.EndOf Unit:=wdSection, Extend:=wdExtend
     clearField
-    SplitRangesWithDelimiter workRange, delimiter, ClaimRangesArray
+    SplitRangeWithDelimiterIntoArray workRange, delimiter, ClaimRangesArray
     FindClaimIndexRanges
+
+    processClaimDependentInfo
+    ''---
+
+    Application.ScreenUpdating = True
 End Sub
 
 Sub clearField()
-    Dim c, cdel As Integer
-    c = workRange.Fields.Count
+    Dim C, cdel As Integer
+    C = workRange.Fields.Count
     Dim ofld As Field
     For Each ofld In workRange.Fields
         If ofld.Type = wdFieldDocVariable Then
@@ -73,7 +110,7 @@ Sub clearField()
         End If
     Next ofld
 
-    For i = 1 To c
+    For i = 1 To C
         myfieldname = "_FdClaim_" & i & "_FdClaim_"
         If DocVarExists(myfieldname) Then
             ActiveDocument.Variables(myfieldname).Delete
@@ -101,9 +138,6 @@ Sub makeFields()
     Application.ScreenUpdating = True
 End Sub
 Private Sub StrToField(ByVal myfieldname As String, ByVal myfieldValue As String)
-
-
-
     With ActiveDocument
         .Variables.Add name:=myfieldname, Value:=myfieldValue
         iPostion = WordfindPositionInText(myfieldname)
@@ -148,7 +182,7 @@ Private Sub FindClaimIndexRanges()
 
             ClaimIndexSPos = ClaimRangeStartPosition + allMatches(0).FirstIndex
             Debug.Print "ClaimIndexFound: " & ClaimIndexFound, ClaimIndexSPos
-            reDimRanges ClaimIndexRangesArray, ClaimIndexSPos, ClaimIndexSPos + Len(ClaimIndexFound)
+            reDimRanges ClaimIndexRangesArray, ClaimIndexSPos, ClaimIndexSPos + Len(ClaimIndexFound), myDocument
             ClaimsCount = ClaimsCount + 1
         End If
 
@@ -168,7 +202,7 @@ Private Sub FindClaimIndexRanges()
                     For j = 0 To amClaimIndex.Count - 1
                         ClaimQuoteshort = amClaimIndex(j)
                         ClaimQuoteshortSPos = ClaimQuoteLongSPos + amClaimIndex(j).FirstIndex
-                        reDimRanges ClaimIndexRangesArray, ClaimQuoteshortSPos, ClaimQuoteshortSPos + Len(ClaimQuoteshort)
+                        reDimRanges ClaimIndexRangesArray, ClaimQuoteshortSPos, ClaimQuoteshortSPos + Len(ClaimQuoteshort), myDocument
                         Debug.Print "----ClaimQuoteshort:" & ClaimQuoteshort & "----" & ClaimQuoteshortSPos
                     Next j
                 End If
@@ -179,5 +213,115 @@ Private Sub FindClaimIndexRanges()
 
     Debug.Print ClaimsCount & " claims found"
 End Sub
+Private Sub processClaimDependentInfo()
+    Dim rng As Range, oneClaims
+    Dim fullSM As String
+    Dim reobj As New Class_VBScriptRegExp
+    Dim blank As claimInfo
+    Dim newclaim As claimInfo
+    '    Dim ctable As New Dictionary
+
+    ReDim Preserve claimInforTable(0 To ClaimsCount)
+    Dim ct2 As Dictionary
+
+    claimPattern = "(\d+)(.*?)，"
+    IndClaimPattern = "一种"
+    DPDClaimPattern = "权利要求(\d+)"
+
+    For Each ClaimRange In ClaimRangesArray
+        oneclaim = ClaimRange.Text
+
+        If Replace(oneclaim, Chr$(13), vbNullString) <> "" Then
+            newclaim = blank
+            With newclaim
+                If reobj.PStest(claimPattern, oneclaim) Then
+                    Set head = reobj.PSEXE
+                    .cNo = head(0).submatches(0)
+
+                    If reobj.PStest(IndClaimPattern, head(0).submatches(1)) Then
+                        .cKind = claimKind_IND
+                        .cDependentFrom = 0
+                        fullSM = head(0).submatches(1)
+                        .cSubjectMatter = Right(fullSM, Len(fullSM) - InStr(1, fullSM, IndClaimPattern) + 1 - Len(IndClaimPattern))
+                    End If
+
+                    If reobj.PStest(DPDClaimPattern, oneclaim) Then
+                        .cDependentFrom = reobj.PSEXE(0).submatches(0)
+                        If .cKind = claimKind_IND Then
+                            .cKind = claimKind_FAKEIND
+                        Else
+                            .cKind = claimKind_DPD
+                        End If
+                    End If
+                End If
+                Debug.Print .cNo, .cSubjectMatter, .cKind, .cDependentFrom
+            End With
+            claimInforTable(newclaim.cNo) = newclaim
+
+        End If
+    Next
+    Set reobj = Nothing
+
+    grouping
+
+End Sub
+
+Private Sub grouping()
+    'base 1
+    Dim groups As New Dictionary
+    GroupNo = 0
+    For i = 1 To UBound(claimInforTable)
+        With claimInforTable(i)
+            '            Debug.Print .cNo, .cSubjectMatter, .cKind, .cDependentFrom
+            Select Case .cKind
+                Case claimKind_IND
+                    GroupNo = GroupNo + 1
+                    groups.Add .cNo, GroupNo
+
+                Case claimKind_DPD
+                    If groups.Exists(.cDependentFrom) Then
+                        groups.Add .cNo, groups(.cDependentFrom)
+                    End If
+                Case claimKind_FAKEIND
+                    '''find father....
+                    GroupNo = GroupNo + 1
+                    groups.Add .cNo, GroupNo
+
+            End Select
+        End With
+    Next
+
+    For j = 1 To GroupNo
+        Dim onegroup()
+        Dim currentSM As String
+        For Each Key In groups.Keys
+            '            Debug.Print Key, groups(Key)
+            If groups(Key) = j Then
+                reDimArrayAdd onegroup, Key
+                If claimInforTable(Key).cSubjectMatter <> vbNullString Then currentSM = claimInforTable(Key).cSubjectMatter
+            End If
+        Next
+        ender = IIf(j = GroupNo, "。", "，")
+        claimInfoSummary = claimInfoSummary & "权利要求" & _
+                                            ArrangeNumArray_merge(onegroup) & _
+                                            "涉及一种" & currentSM & ender
 
 
+        Debug.Print claimInfoSummary
+        Erase onegroup
+    Next
+
+End Sub
+Sub InsertClaimSummary(Optional ByVal rngRange As Range)
+    Dim newStart, newEnd
+    If rngRange Is Nothing Then
+        Set rngRange = Selection.Range
+    End If
+    newStart = rngRange.Start
+    rngRange.Text = ""
+    rngRange.InsertAfter claimInfoSummary
+End Sub
+
+Private Sub Class_Terminate()
+    myDocument.Close SaveChanges:=wdDoNotSaveChanges
+End Sub

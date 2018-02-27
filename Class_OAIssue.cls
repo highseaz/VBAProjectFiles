@@ -22,12 +22,12 @@ Function IssuesTexts(ByVal i As Integer) As Class_IssuesText
     Set IssuesTexts = IssuesTextSet(i)
 End Function
 
-Public Property Get DocPath() As String
-    DocPath = myDocPath
+Public Property Get docPath() As String
+    docPath = myDocPath
 End Property
 
 
-Public Property Let DocPath(ByVal DocumentFullPath As String)
+Public Property Let docPath(ByVal DocumentFullPath As String)
     Dim myDocument As Document
     If LCase(Right(DocumentFullPath, 3)) = "pdf" Then
         myDocPath = NewfileFromPDFWithFormat(DocumentFullPath, "docx")
@@ -108,11 +108,11 @@ Private Sub Class_Initialize()
 
 End Sub
 Function ENSummary() As String
-    Dim Str As String
+    Dim str As String
     For i = 0 To Count - 1
-        Str = Str & IssuesTexts(i).ENText & vbNewLine
+        str = str & IssuesTexts(i).ENText & vbNewLine
     Next
-    ENSummary = Str
+    ENSummary = str
 
 End Function
 Sub InsertCNsummary(Optional ByVal rngRange As Range)
@@ -130,22 +130,22 @@ Sub InsertCNsummary(Optional ByVal rngRange As Range)
 
 End Sub
 Function CNSummary() As String
-    Dim Str As String
+    Dim str As String
 
     For i = 0 To Count - 1
-        Str = Str & IssuesTexts(i).CNText & vbNewLine
+        str = str & IssuesTexts(i).CNText & vbNewLine
     Next
 
     For j = 1 To allRefs.Count
 
         Dim reobj As New Class_VBScriptRegExp
-        If reobj.PStest("D" & j, Str, True, False) Then
+        If reobj.PStest("D" & j, str, True, False) Then
             If ReferenceItem(j - 1).refNumber <> vbNullString Then
                 refNum = ReferenceItem(j - 1).refNumber
                 priorityDate = getDictPatentInfobyPatNum(cleanPatentNum(refNum)).Item("priorityDate")
                 var = Split(priorityDate, "-")
                 priorityDateCN = var(0) & "年" & var(1) & "月" & var(2) & "日"
-                Str = reobj.objRegExp.Replace(Str, "D" & j & _
+                str = reobj.objRegExp.Replace(str, "D" & j & _
                                                  "(" & ReferenceItem(j - 1).refName & _
                                                  "，" & refNum & _
                                                  "，其最早优先权日为 " & priorityDateCN & _
@@ -158,7 +158,7 @@ Function CNSummary() As String
         ''
         '        Debug.Print patentinfodic
     Next
-    CNSummary = Str
+    CNSummary = str
 End Function
 
 Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searchTextString As String)
@@ -168,7 +168,7 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
         Exit Function
     End If
 
-    Dim Str As String
+    Dim str As String
 
     Dim reobj As New Class_VBScriptRegExp
 
@@ -205,16 +205,16 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
             End If
 
             addrefIndex = allRefs.Add(singleRefName, singleRefNo)
-            Str = Str & "D" & addrefIndex + 1 & "、"
+            str = str & "D" & addrefIndex + 1 & "、"
         Next
     End If
     Set reobj = Nothing
-    FindRefInIssuesText = Left(Str, Len(Str) - 1)
+    FindRefInIssuesText = Left(str, Len(str) - 1)
 
 End Function
-Sub CleanDocFile(ByRef Doc As Document)
+Sub CleanDocFile(ByRef doc As Document)
 
-    With Doc.Range
+    With doc.Range
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting
         With .Find

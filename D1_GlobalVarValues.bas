@@ -38,6 +38,12 @@ End Function
 Function CONSTCaseIDPattern() As String
     CONSTCaseIDPattern = JsonReadFromConfFile("CaseIDPattern")
 End Function
+Function CONSTMYEMAIL() As String
+    CONSTMYEMAIL = JsonReadFromConfFile("MYEMAIL")
+End Function
+Function CONSTCompName() As String
+    CONSTCompName = JsonReadFromConfFile("CompName")
+End Function
 
 
 ''''''''''''''''replaceKeywords'''''''''''''''''''''''''''

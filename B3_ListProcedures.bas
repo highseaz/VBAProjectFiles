@@ -208,7 +208,7 @@ Sub ShowProcedureInfo2()
         compName = VBComp.name
         If InStr(1, compName, "_") < 1 Then GoTo next_comp
 
-        Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
+        Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.last)
         rowNew.Cells.Merge
 
         wdTable.Cell(rowNew.index, 1).Range.InsertAfter compName
@@ -229,7 +229,7 @@ Sub ShowProcedureInfo2()
 
                 PInfo = ProcedureInfo(ProcName, ProcKind, CodeMod)
 
-                Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.Last)
+                Set rowNew = wdTable.Rows.Add(BeforeRow:=wdTable.Rows.last)
                 wdTable.Cell(rowNew.index, 1).Range.InsertAfter PInfo.ProcDeclaration
 
                 '                Debug.Print CompName

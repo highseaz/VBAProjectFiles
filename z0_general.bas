@@ -122,7 +122,7 @@ Public Sub SortDictionary(Dict As Scripting.Dictionary, _
 Dim Ndx As Long
 Dim KeyValue As String
 Dim ItemValue As Variant
-Dim Arr() As Variant
+Dim arr() As Variant
 Dim KeyArr() As String
 Dim VTypes() As VbVarType
 
@@ -158,23 +158,23 @@ If SortByKey = True Then
     ' Dict object, and load that array
     ' with the key names.
     ''''''''''''''''''''''''''''''''''''''''
-    ReDim Arr(0 To Dict.Count - 1)
+    ReDim arr(0 To Dict.Count - 1)
     
     For Ndx = 0 To Dict.Count - 1
-        Arr(Ndx) = Dict.Keys(Ndx)
+        arr(Ndx) = Dict.Keys(Ndx)
     Next Ndx
     
     ''''''''''''''''''''''''''''''''''''''
     ' Sort the key names.
     ''''''''''''''''''''''''''''''''''''''
-    QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=CompareMode
+    QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=CompareMode
     ''''''''''''''''''''''''''''''''''''''''''''
     ' Load TempDict. The key value come from
     ' our sorted array of keys Arr, and the
     ' Item comes from the original Dict object.
     ''''''''''''''''''''''''''''''''''''''''''''
     For Ndx = 0 To Dict.Count - 1
-        KeyValue = Arr(Ndx)
+        KeyValue = arr(Ndx)
         TempDict.Add Key:=KeyValue, Item:=Dict.Item(KeyValue)
     Next Ndx
     '''''''''''''''''''''''''''''''''
@@ -197,7 +197,7 @@ Else
     ' This keeps the association between the
     ' item and its key.
     '''''''''''''''''''''''''''''''''''''''''''''''
-    ReDim Arr(0 To Dict.Count - 1)
+    ReDim arr(0 To Dict.Count - 1)
     ReDim VTypes(0 To Dict.Count - 1)
 
     For Ndx = 0 To Dict.Count - 1
@@ -215,7 +215,7 @@ Else
         ' array. We'll use these values later to convert
         ' back to the proper data type for Item.
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            Arr(Ndx) = Dict.Items(Ndx) & vbNullChar & Dict.Keys(Ndx)
+            arr(Ndx) = Dict.Items(Ndx) & vbNullChar & Dict.Keys(Ndx)
             VTypes(Ndx) = VarType(Dict.Items(Ndx))
             
     Next Ndx
@@ -224,15 +224,15 @@ Else
     ' items of the Dictionary along
     ' with their associated keys
     ''''''''''''''''''''''''''''''''''
-    QSortInPlace InputArray:=Arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=vbTextCompare
+    QSortInPlace InputArray:=arr, LB:=-1, UB:=-1, Descending:=Descending, CompareMode:=vbTextCompare
     
-    For Ndx = LBound(Arr) To UBound(Arr)
+    For Ndx = LBound(arr) To UBound(arr)
         '''''''''''''''''''''''''''''''''''''
         ' Loop trhogh the array of sorted
         ' Items, Split based on vbNullChar
         ' to get the Key from the element
         ' of the array Arr.
-        SplitArr = Split(Arr(Ndx), vbNullChar)
+        SplitArr = Split(arr(Ndx), vbNullChar)
         ''''''''''''''''''''''''''''''''''''''''''
         ' It may have been possible that item in
         ' the dictionary contains a vbNullChar.
@@ -701,7 +701,7 @@ End Function
 
 
 
-Private Function NumberOfArrayDimensions(Arr As Variant) As Integer
+Private Function NumberOfArrayDimensions(arr As Variant) As Integer
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' NumberOfArrayDimensions
 ' This function returns the number of dimensions of an array. An unallocated dynamic array
@@ -715,7 +715,7 @@ On Error Resume Next
 ' in the array. Return Ndx - 1.
 Do
     Ndx = Ndx + 1
-    Res = UBound(Arr, Ndx)
+    Res = UBound(arr, Ndx)
 Loop Until Err.Number <> 0
 
 NumberOfArrayDimensions = Ndx - 1
@@ -746,7 +746,7 @@ Dim Ndx As Long
 Dim Ndx2 As Long
 Dim OrigN As Long
 Dim NewN As Long
-Dim NewArr() As Variant
+Dim newArr() As Variant
 
 ''''''''''''''''''''''''''''''''
 ' Set the default return value.
@@ -813,15 +813,15 @@ If IsSimpleDataType(InputArray(LBound(InputArray))) = False Then
     End If
 End If
 
-ReDim NewArr(LBound(InputArray) To UBound(InputArray))
-NewN = UBound(NewArr)
+ReDim newArr(LBound(InputArray) To UBound(InputArray))
+NewN = UBound(newArr)
 For OrigN = LBound(InputArray) To UBound(InputArray)
-    NewArr(NewN) = InputArray(OrigN)
+    newArr(NewN) = InputArray(OrigN)
     NewN = NewN - 1
 Next OrigN
 
-For NewN = LBound(NewArr) To UBound(NewArr)
-    InputArray(NewN) = NewArr(NewN)
+For NewN = LBound(newArr) To UBound(newArr)
+    InputArray(NewN) = newArr(NewN)
 Next NewN
 
 ReverseArrayInPlace = True
@@ -944,7 +944,7 @@ End Select
 
 End Function
 
-Private Function IsArrayAllocated(Arr As Variant) As Boolean
+Private Function IsArrayAllocated(arr As Variant) As Boolean
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' IsArrayAllocated
 ' Returns TRUE if the array is allocated (either a static array or a dynamic array that has been
@@ -957,7 +957,7 @@ Dim N As Long
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 ' If Arr is not an array, return FALSE and get out.
 '''''''''''''''''''''''''''''''''''''''''''''''''''
-If IsArray(Arr) = False Then
+If IsArray(arr) = False Then
     IsArrayAllocated = False
     Exit Function
 End If
@@ -967,7 +967,7 @@ End If
 ' an error will occur. Test Err.Number to see if an error occured.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 On Error Resume Next
-N = UBound(Arr, 1)
+N = UBound(arr, 1)
 If Err.Number = 0 Then
     '''''''''''''''''''''''''''''''''''''
     ' No error. Array has been allocated.

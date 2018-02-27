@@ -376,17 +376,17 @@ Function DocVarExists(ByVal varName As String) As Boolean
 
 End Function
 Sub changeStrToFieldWithDiag2()
-    Dim Str As String
-    Str = Trim(Selection.Range.Text)
-    If Selection.Fields.Count = 0 And Len(Str) > 0 Then
+    Dim str As String
+    str = Trim(Selection.Range.Text)
+    If Selection.Fields.Count = 0 And Len(str) > 0 Then
 
         Dim varResponse As Variant
-        varResponse = MsgBox("是否把此部分内容变更为域？" & Chr(13) & "__" & Str & "__" & Chr(13) & Chr(13), vbYesNo)
-        If varResponse = vbYes Then changeStrToField (Str)
-    ElseIf Str = "" Then
+        varResponse = MsgBox("是否把此部分内容变更为域？" & Chr(13) & "__" & str & "__" & Chr(13) & Chr(13), vbYesNo)
+        If varResponse = vbYes Then changeStrToField (str)
+    ElseIf str = "" Then
 
-        Str = Trim(InputBox("input the str to be transformed", "title"))
-        If Str <> "" Then changeStrToField (Str)
+        str = Trim(InputBox("input the str to be transformed", "title"))
+        If str <> "" Then changeStrToField (str)
     ElseIf Selection.Fields.Count <> 0 Then
         '     todo   xxxx
 

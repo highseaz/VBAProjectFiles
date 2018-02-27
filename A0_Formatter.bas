@@ -189,7 +189,7 @@ Public Sub formatProject(vbaProject As VBProject)
     Next
 End Sub
 
-Public Sub codeformat()
+Public Sub cm()
     formatCode Application.VBE.ActiveCodePane.CodeModule
 End Sub
 
@@ -334,14 +334,14 @@ End Function
 
 ' Trims trailing comments (and whitespace before a comment) from a line of code
 Private Function TrimComments(ByVal line As String) As String
-    Dim c               As Long
+    Dim C               As Long
     Dim inQuotes        As StringStatus
     Dim inComment       As Boolean
 
     inQuotes = NotInString
     inComment = False
-    For c = 1 To Len(line)
-        If Mid(line, c, 1) = Chr(34) Then
+    For C = 1 To Len(line)
+        If Mid(line, C, 1) = Chr(34) Then
             ' Found a double quote
             Select Case inQuotes
                 Case NotInString:
@@ -358,13 +358,13 @@ Private Function TrimComments(ByVal line As String) As String
             End If
         End If
         ' Now know as much about status inside double quotes as possible, can test for comment
-        If inQuotes = NotInString And Mid(line, c, 1) = "'" Then
+        If inQuotes = NotInString And Mid(line, C, 1) = "'" Then
             inComment = True
             Exit For
         End If
-    Next c
+    Next C
     If inComment Then
-        TrimComments = Trim(Left(line, c - 1))
+        TrimComments = Trim(Left(line, C - 1))
     Else
         TrimComments = line
     End If

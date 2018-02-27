@@ -63,7 +63,7 @@ Sub transferFromCNtoPCT()
 
     ''-------------------------------------------------------------------
     aStart(9) = RangeIncludingStr(PCTSplitDelimiter(9), docOri).End
-    aEnd(9) = docOri.Paragraphs.Last.Range.End
+    aEnd(9) = docOri.Paragraphs.last.Range.End
     Set tgtpnt(9) = docNew.Bookmarks(4).Range.Next.Next
     'format3
     ''------------------------------------------------------------------

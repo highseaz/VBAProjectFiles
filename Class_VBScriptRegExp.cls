@@ -42,6 +42,16 @@ Function PSEXE() As Object
     End If
 End Function
 
+Function PSReplace(ByVal strReplacement As String) As String
+
+    If sText = vbNullString Or sPattern = vbNullString Then
+        Debug.Print "objRegExp is not initialized."
+        PSReplace = ""
+    Else
+        PSReplace = objRegExp.Replace(sText, strReplacement)
+    End If
+End Function
+
 Private Sub Class_Terminate()
     Set objRegExp = Nothing
 End Sub

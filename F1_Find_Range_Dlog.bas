@@ -1,5 +1,5 @@
 Attribute VB_Name = "F1_Find_Range_Dlog"
-Function RangeIncludingStr(ByVal findwhat As String, ByVal Doc As Document, Optional ByVal spaceSenstive As Boolean = False) As Range
+Function RangeIncludingStr(ByVal findwhat As String, ByVal doc As Document, Optional ByVal spaceSenstive As Boolean = False) As Range
     '查找特定字符所在区域
 
     'reference：
@@ -19,7 +19,7 @@ Function RangeIncludingStr(ByVal findwhat As String, ByVal Doc As Document, Opti
     End If
     re.IgnoreCase = True
     re.Global = True
-    For Each para In Doc.Paragraphs
+    For Each para In doc.Paragraphs
 
 
         If re.test(para.Range.Text) Then

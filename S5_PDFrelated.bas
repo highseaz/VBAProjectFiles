@@ -1,10 +1,10 @@
 Attribute VB_Name = "S5_PDFrelated"
 
 
-Sub ExportAsPDFFile(Optional Doc As Document)
+Sub ExportAsPDFFile(Optional doc As Document)
 
-    If Doc Is Nothing Or IsMissing(Doc) Then Set Doc = ActiveDocument
-    With Doc
+    If doc Is Nothing Or IsMissing(doc) Then Set doc = ActiveDocument
+    With doc
         .ExportAsFixedFormat OutputFileName:= _
         .Path & Application.PathSeparator & .name & ".pdf", _
         ExportFormat:=wdExportFormatPDF, OpenAfterExport:=True, OptimizeFor:= _
