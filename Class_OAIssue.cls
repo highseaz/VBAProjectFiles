@@ -65,6 +65,7 @@ Private Sub InitializeInfo(myDocument As Document)
     IssuesCount = 0
 
     Set rngStart = RangeIncludingStr("detailed action", myDocument)
+    Debug.Print rngStart.Text
     Set rngEnd = RangeIncludingStr("conclusion", myDocument)
     paraStart = myDocument.Range(0, rngStart.End).Paragraphs.Count
     paraEnd = myDocument.Range(0, rngEnd.End).Paragraphs.Count
@@ -75,6 +76,7 @@ Private Sub InitializeInfo(myDocument As Document)
 
     For paraindex = paraStart To paraEnd
         Set para = myDocument.Paragraphs(paraindex)
+        Debug.Print para.Range.Text
         For i = 1 To jsDic.Count
 
             If reobj.PStest(jsDic(i)("IssuePattern"), para.Range.Text) Then
@@ -151,7 +153,7 @@ Function CNSummary() As String
                                                  "，其最早优先权日为 " & priorityDateCN & _
                                                  ")")
             Else
-            
+
             End If
         End If
 
@@ -162,14 +164,9 @@ Function CNSummary() As String
 End Function
 
 Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searchTextString As String)
-
-    If refParaPattern = vbNullString Then
-        FindRefInIssuesText = vbNullString
-        Exit Function
-    End If
-
+    FindRefInIssuesText = vbNullString
+    If refParaPattern = vbNullString Then Exit Function
     Dim str As String
-
     Dim reobj As New Class_VBScriptRegExp
 
     If reobj.PStest(refParaPattern, searchTextString) Then
@@ -189,7 +186,7 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
                 singleRefNo = singleRefallMatches(0).submatches(0) & singleRefallMatches(0).submatches(1)
             End If
 
-            refNamePattern1 = "(?:hereinafter)\s([A-Z]\w*)"
+            refNamePattern1 = "(?:hereinafter)\s.*?([A-Z]\w*)"
             refNamePattern2 = "[A-Z]\w*\s(?=et al)"
             refNamePattern3 = " ([A-Z]\w*)"
 
@@ -207,18 +204,26 @@ Private Function FindRefInIssuesText(ByVal refParaPattern As String, ByVal searc
             addrefIndex = allRefs.Add(singleRefName, singleRefNo)
             str = str & "D" & addrefIndex + 1 & "、"
         Next
+        
+    FindRefInIssuesText = Left(str, Len(str) - 1)
     End If
     Set reobj = Nothing
-    FindRefInIssuesText = Left(str, Len(str) - 1)
+    
 
 End Function
 Sub CleanDocFile(ByRef doc As Document)
+
+doc.Content.ListFormat.RemoveNumbers NumberType:=wdNumberParagraph
+doc.Range.Cut
+doc.Range.PasteAndFormat wdFormatPlainText
+DelBlankPara doc
+delSpace doc
 
     With doc.Range
         .Find.ClearFormatting
         .Find.Replacement.ClearFormatting
         With .Find
-            .Text = "([a-zA-Z0-9 ])[^m^13]{1,}([a-z0-9 ])"
+            .Text = "([a-zA-Z0-9 ])[^m^13^s]{1,}([a-z0-9 ])"
             .Replacement.Text = "\1 \2"
             .Forward = True
             .Wrap = wdFindContinue

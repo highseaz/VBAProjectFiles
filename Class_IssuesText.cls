@@ -56,7 +56,7 @@ End Sub
 
 Private Sub transformFromENtoCN()
     Dim claimIndexPatternInIssue As String
-    claimIndexPatternInIssue = "(?:claim[s\s]*)(\d+[\d-, \w]*?)(?=(is)|(are)|(would))"
+    claimIndexPatternInIssue = "(?:claim[s\s\(\)]*)(\d+[\d-,\s\w]*?)(?=(is)|(are)|(would))"
 
     Dim reobj As New Class_VBScriptRegExp
     Dim re, allMatches, temjs

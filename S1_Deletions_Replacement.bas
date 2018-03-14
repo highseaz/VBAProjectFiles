@@ -45,7 +45,7 @@ Sub delSpace(Optional doc As Document)
 
         With .Content
             With .Find
-                .Text = "([!a-zA-Z0-9_,.;:\! ])^32{1,}([!a-zA-Z])"
+                .Text = "([!a-zA-Z0-9_,.;:\! \)])^32{1,}([!a-zA-Z])"
                 .Replacement.Text = "\1\2"
                 .MatchWildcards = True
                 .Execute Replace:=wdReplaceAll
@@ -57,7 +57,7 @@ Sub delSpace(Optional doc As Document)
                 .Execute Replace:=wdReplaceAll
             End With
             With .Find
-                .Text = " ([,.;])"
+                .Text = "^32([,.;])"
                 .Replacement.Text = "\1"
                 .MatchWildcards = True
                 .Execute Replace:=wdReplaceAll

@@ -22,6 +22,7 @@ Private myDocument As Document
 Private claimInfoSummary As String
 
 Private claimInforTable() As claimInfo
+Private DicGroupsInfo As New Dictionary
 
 Private pLanguage As Languagetype
 
@@ -71,7 +72,7 @@ Public Sub ClassInit(Optional ByVal doc As Document, Optional ByVal lng As Langu
 
     Application.ScreenUpdating = False
     ''---___________________
-    If IsMissing(doc) Then
+    If IsMissing(doc) Or (doc Is Nothing) Then
         Dim docPath As String
         docPath = SelectedFileWithDlog
         If docPath = "" Then
@@ -88,12 +89,20 @@ Public Sub ClassInit(Optional ByVal doc As Document, Optional ByVal lng As Langu
     myDocument.Revisions.AcceptAll
 
     Set workRange = RangeIncludingStr(workRngPattern, myDocument)
+    If workRange Is Nothing Then
+        MsgBox "workrange is zero"
+        Class_Terminate
+        Exit Sub
+    End If
     workRange.EndOf Unit:=wdSection, Extend:=wdExtend
+
     clearField
+
     SplitRangeWithDelimiterIntoArray workRange, delimiter, ClaimRangesArray
     FindClaimIndexRanges
 
     processClaimDependentInfo
+    GetGrouping
     ''---
 
     Application.ScreenUpdating = True
@@ -172,6 +181,7 @@ Private Sub FindClaimIndexRanges()
     ClaimsCount = 0
 
     For Each ClaimRange In ClaimRangesArray
+        Debug.Print UBound(ClaimRangesArray)
         '        ClaimRangeStartPosition = RngStartPosition + ClaimRange.Start
         ClaimRangeStartPosition = ClaimRange.Start
 
@@ -220,8 +230,8 @@ Private Sub processClaimDependentInfo()
     Dim blank As claimInfo
     Dim newclaim As claimInfo
     '    Dim ctable As New Dictionary
-
     ReDim Preserve claimInforTable(0 To ClaimsCount)
+    i = 1
     Dim ct2 As Dictionary
 
     claimPattern = "(\d+)(.*?)，"
@@ -230,11 +240,15 @@ Private Sub processClaimDependentInfo()
 
     For Each ClaimRange In ClaimRangesArray
         oneclaim = ClaimRange.Text
+        oneclaim = Replace(oneclaim, Chr$(13), vbNullString)
+        oneclaim = Replace(oneclaim, " ", vbNullString)
+        Debug.Print oneclaim
 
-        If Replace(oneclaim, Chr$(13), vbNullString) <> "" Then
+        If oneclaim <> "" Then
             newclaim = blank
             With newclaim
                 If reobj.PStest(claimPattern, oneclaim) Then
+
                     Set head = reobj.PSEXE
                     .cNo = head(0).submatches(0)
 
@@ -243,49 +257,55 @@ Private Sub processClaimDependentInfo()
                         .cDependentFrom = 0
                         fullSM = head(0).submatches(1)
                         .cSubjectMatter = Right(fullSM, Len(fullSM) - InStr(1, fullSM, IndClaimPattern) + 1 - Len(IndClaimPattern))
-                    End If
-
-                    If reobj.PStest(DPDClaimPattern, oneclaim) Then
-                        .cDependentFrom = reobj.PSEXE(0).submatches(0)
-                        If .cKind = claimKind_IND Then
+                        If reobj.PStest(DPDClaimPattern, oneclaim) Then
+                            .cDependentFrom = reobj.PSEXE(0).submatches(0)
                             .cKind = claimKind_FAKEIND
-                        Else
-                            .cKind = claimKind_DPD
                         End If
+
+                    ElseIf reobj.PStest(DPDClaimPattern, oneclaim) Then
+                        .cDependentFrom = reobj.PSEXE(0).submatches(0)
+                        .cKind = claimKind_DPD
+                    Else
+                        GoTo nextline
                     End If
                 End If
                 Debug.Print .cNo, .cSubjectMatter, .cKind, .cDependentFrom
             End With
-            claimInforTable(newclaim.cNo) = newclaim
+
+            '            ReDim Preserve claimInforTable(0 To i)
+            '            claimInforTable(newclaim.cNo) = newclaim
+            If i <= ClaimsCount Then claimInforTable(i) = newclaim
+            i = i + 1
 
         End If
+nextline:
     Next
     Set reobj = Nothing
 
-    grouping
+
 
 End Sub
 
-Private Sub grouping()
+Private Sub GetGrouping()
     'base 1
-    Dim groups As New Dictionary
+
     GroupNo = 0
     For i = 1 To UBound(claimInforTable)
         With claimInforTable(i)
-            '            Debug.Print .cNo, .cSubjectMatter, .cKind, .cDependentFrom
+            Debug.Print "**:" & i, .cNo, .cSubjectMatter, .cKind, .cDependentFrom
             Select Case .cKind
                 Case claimKind_IND
                     GroupNo = GroupNo + 1
-                    groups.Add .cNo, GroupNo
+                    DicGroupsInfo.Add .cNo, GroupNo
 
                 Case claimKind_DPD
-                    If groups.Exists(.cDependentFrom) Then
-                        groups.Add .cNo, groups(.cDependentFrom)
+                    If DicGroupsInfo.Exists(.cDependentFrom) Then
+                        DicGroupsInfo.Add .cNo, DicGroupsInfo(.cDependentFrom)
                     End If
                 Case claimKind_FAKEIND
                     '''find father....
                     GroupNo = GroupNo + 1
-                    groups.Add .cNo, GroupNo
+                    DicGroupsInfo.Add .cNo, GroupNo
 
             End Select
         End With
@@ -294,13 +314,18 @@ Private Sub grouping()
     For j = 1 To GroupNo
         Dim onegroup()
         Dim currentSM As String
-        For Each Key In groups.Keys
-            '            Debug.Print Key, groups(Key)
-            If groups(Key) = j Then
-                reDimArrayAdd onegroup, Key
-                If claimInforTable(Key).cSubjectMatter <> vbNullString Then currentSM = claimInforTable(Key).cSubjectMatter
-            End If
+        For i = 1 To UBound(claimInforTable)
+            With claimInforTable(i)
+                Key = .cNo
+                If DicGroupsInfo(Key) = j Then
+                    Debug.Print Key, DicGroupsInfo(Key)
+                    reDimArrayAdd onegroup, Key
+                    If .cSubjectMatter <> vbNullString Then currentSM = .cSubjectMatter
+                End If
+            End With
         Next
+
+
         ender = IIf(j = GroupNo, "。", "，")
         claimInfoSummary = claimInfoSummary & "权利要求" & _
                                             ArrangeNumArray_merge(onegroup) & _

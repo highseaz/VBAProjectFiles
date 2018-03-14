@@ -54,6 +54,7 @@ Public Sub ExportModules()
         If InStr(1, szFileName, "_") > 1 And bExport Then
             ''' Export the component to a text file.
             cmpComponent.Export szExportPath & szFileName
+            Debug.Print szExportPath & szFileName
             ''' remove it from the project if you want
             '''wdSource.VBProject.VBComponents.Remove cmpComponent
 

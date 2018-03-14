@@ -17,12 +17,14 @@ Sub insertOAsummary()
     If pdffile = "" Then Exit Sub
     
     OA.docPath = pdffile
+    Dim rng As Range
     Set rng = RangeIncludingStr("\[CNsummary\]", ActiveDocument, True)
-    OA.InsertCNsummary (rng)
-    Debug.Print test1.ENSummary
+    OA.InsertCNsummary rng
+    Debug.Print OA.ENSummary
     
     Dim claims As Class_Claims
     Set claims = New Class_Claims
+    claims.ClassInit , lng_CN
     
     Set rng = RangeIncludingStr("\[ss\]", ActiveDocument, True)
     claims.InsertClaimSummary rng
